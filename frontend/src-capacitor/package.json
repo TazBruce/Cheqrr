@@ -1,0 +1,12 @@
+{
+  "name": "partplanner",
+  "version": "0.0.1",
+  "description": "A PC part management dashboard for builders",
+  "author": "Tasman Bruce <tasmanbrucework@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "2.5.0",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}

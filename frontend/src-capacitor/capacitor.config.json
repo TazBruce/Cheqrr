@@ -1,0 +1,7 @@
+{
+  "appId": "org.partplanner.app",
+  "appName": "Part Planner",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www"
+}

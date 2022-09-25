@@ -1,0 +1,10 @@
+{
+  "appId": "org.partplanner.app",
+  "appName": "Part Planner",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "url": "http://192.168.1.17:9500"
+  }
+}
