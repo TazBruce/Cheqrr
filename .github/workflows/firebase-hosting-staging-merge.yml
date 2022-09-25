@@ -18,4 +18,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PARTPLANNER_14E87 }}'
           channelId: staging
-          projectId: partplanner-14e87
+          projectId: cheqrr-3bfb6

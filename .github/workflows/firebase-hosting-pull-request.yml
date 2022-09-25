@@ -15,4 +15,4 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PARTPLANNER_14E87 }}'
-          projectId: partplanner-14e87
+          projectId: cheqrr-3bfb6
