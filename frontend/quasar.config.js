@@ -28,7 +28,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios'],
+    boot: ['i18n', 'axios', 'firebase'],
 
     bin: {
       windowsAndroidStudio: 'C:\\Users\\iamta\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\212.5712.43.2112.8815526\\bin\\studio64.exe'
