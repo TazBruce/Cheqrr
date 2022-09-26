@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import {User} from '../types/User';
+import { User } from '../types/User';
 
 /**
  * The auth store.
@@ -29,7 +29,7 @@ export const useAuth = defineStore({
         .then((userCredential) => {
           this.user = userCredential.user;
           this.isLoggedIn = true;
-          this.router.push('/');
+          this.router.push('/dashboard');
           alert('Registered!');
         })
         .catch((error) => {
@@ -47,7 +47,7 @@ export const useAuth = defineStore({
         .then((userCredential) => {
           this.user = userCredential.user;
           this.isLoggedIn = true;
-          this.router.push('/');
+          this.router.push('/dashboard');
           alert('Signed in!');
         })
         .catch((error) => {

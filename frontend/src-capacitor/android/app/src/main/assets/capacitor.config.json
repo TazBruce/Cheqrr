@@ -1,5 +1,5 @@
 {
-  "appId": "org.partplanner.app",
+  "appId": "org.cheqrr.app",
   "appName": "Cheqrr",
   "bundledWebRuntime": false,
   "npmClient": "yarn",

@@ -1,11 +1,24 @@
 import { RouteRecordRaw } from 'vue-router';
 
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/Dashboard.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    component: () => import('layouts/LoggedOut.vue'),
+    children: [
+      { path: '', redirect: 'login' },
+      { path: 'login', component: () => import('../pages/loggedOut/LoginPage.vue') },
+      { path: 'register', component: () => import('../pages/loggedOut/RegisterPage.vue') }
+    ],
   },
+  {
+    path: '/dashboard',
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('../pages/Dashboard/IndexPage.vue') },
+    ],
+  },
+
 
   // Always leave this as last one,
   // but you can also remove it

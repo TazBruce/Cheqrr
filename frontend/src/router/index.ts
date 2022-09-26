@@ -7,6 +7,7 @@ import {
 } from 'vue-router';
 
 import routes from './routes';
+import { useAuth } from 'stores/auth.store';
 
 /*
  * If not building with SSR mode, you can
@@ -31,6 +32,19 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  Router.beforeEach(async  (to) => {
+    console.log(to.path);
+    const publicPages = ['/login', '/register'];
+    const authRequired = !publicPages.includes(to.path);
+    const authStore = useAuth();
+
+    if (authRequired && !authStore.isLoggedIn) {
+      return '/login';
+    } else if ((to.path === '/login' || to.path === '/register') && authStore.isLoggedIn) {
+      return '/dashboard';
+    }
+  })
 
   return Router;
 });
