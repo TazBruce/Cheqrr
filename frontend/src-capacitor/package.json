@@ -1,7 +1,7 @@
 {
-  "name": "partplanner",
+  "name": "cheqrr",
   "version": "0.0.1",
-  "description": "A PC part management dashboard for builders",
+  "description": "A dashboard for managing and inspecting your tools",
   "author": "Tasman Bruce <tasmanbrucework@gmail.com>",
   "private": true,
   "dependencies": {
