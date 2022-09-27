@@ -25,7 +25,7 @@ export const useAuth = defineStore({
      * @param password The password of the user
      */
     async register(email: string, password: string) {
-      createUserWithEmailAndPassword(auth, email, password)
+      await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           this.user = userCredential.user;
           this.isLoggedIn = true;
@@ -43,7 +43,7 @@ export const useAuth = defineStore({
      * @param password The password of the user
      */
     async signIn(email: string, password: string) {
-      signInWithEmailAndPassword(auth, email, password)
+      await signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           this.user = userCredential.user;
           this.isLoggedIn = true;

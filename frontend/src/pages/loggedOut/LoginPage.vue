@@ -25,7 +25,7 @@
               />
             </template>
           </q-input>
-          <q-btn label="Login" type="submit" color="primary" />
+          <q-btn label="Login" type="submit" color="primary" :loading="isLoading"/>
           <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
         </q-form>
       </q-card-section>
@@ -34,29 +34,25 @@
   </q-page>
 </template>
 
-<script>
-import {useAuth} from '../../stores/auth.store';
-import {ref} from 'vue';
+<script setup>
+import { useAuth } from 'stores/auth.store';
+import { ref } from 'vue';
 
-export default {
-  name: 'LoginPage',
-  data () {
-    return {
-      isPwd: ref(true),
-      email: '',
-      password: '',
-    }
-  },
-  methods: {
-    onSubmit () {
-      const auth = useAuth();
-      auth.signIn(this.email, this.password);
-    },
-    onReset () {
-      this.email = ''
-      this.password = ''
-    },
-  },
+let isPwd = ref(true)
+let isLoading = ref(false)
+let email = ref('');
+let password = ref('');
+
+async function onSubmit() {
+  const auth = useAuth();
+  isLoading.value = true;
+  await auth.signIn(email.value, password.value);
+  isLoading.value = false;
+}
+
+function onReset() {
+  email.value = ''
+  password.value = ''
 }
 </script>
 
