@@ -14,6 +14,15 @@
         <q-toolbar-title>
           Cheqrr
         </q-toolbar-title>
+
+        <q-btn
+          flat
+          dense
+          round
+          icon="account_circle"
+          aria-label="Account"
+          @click="signOut"
+          />
       </q-toolbar>
     </q-header>
 
@@ -40,6 +49,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
+import { useAuth } from 'src/stores/auth.store';
 
 const linksList = [
   {
@@ -67,6 +77,10 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
+      },
+      signOut() {
+        const auth = useAuth();
+        auth.signOut();
       }
     }
   }

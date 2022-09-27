@@ -60,6 +60,7 @@ export const useAuth = defineStore({
         .then(() => {
           this.user = {} as User;
           this.isLoggedIn = false;
+          this.router.replace('/');
           alert('Signed out!');
         })
         .catch((error) => {
