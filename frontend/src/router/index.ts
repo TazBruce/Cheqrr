@@ -35,13 +35,13 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async  (to) => {
     console.log(to.path);
-    const publicPages = ['/login', '/register'];
+    const publicPages = ['/','/login', '/register'];
     const authRequired = !publicPages.includes(to.path);
     const authStore = useAuth();
 
     if (authRequired && !authStore.isLoggedIn) {
-      return '/login';
-    } else if ((to.path === '/login' || to.path === '/register') && authStore.isLoggedIn) {
+      return '/';
+    } else if (!authRequired && authStore.isLoggedIn) {
       return '/dashboard';
     }
   })

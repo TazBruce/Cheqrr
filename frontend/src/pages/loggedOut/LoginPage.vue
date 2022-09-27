@@ -2,6 +2,14 @@
   <q-page>
     <q-card>
       <q-card-section>
+        <q-btn
+          icon="chevron_left"
+          flat
+          round
+          dense
+          color="primary"
+          @click="back"
+        />
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
             v-model="email"
@@ -29,7 +37,7 @@
           <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
         </q-form>
       </q-card-section>
-      <router-link to="register" class="btn btn-link">Register</router-link>
+      <router-link to="register" class="btn btn-link" replace>Register</router-link>
     </q-card>
   </q-page>
 </template>
@@ -37,6 +45,9 @@
 <script setup>
 import { useAuth } from 'stores/auth.store';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 let isPwd = ref(true)
 let isLoading = ref(false)
@@ -54,6 +65,11 @@ function onReset() {
   email.value = ''
   password.value = ''
 }
+
+function back() {
+  router.replace('/')
+}
+
 </script>
 
 <style scoped>

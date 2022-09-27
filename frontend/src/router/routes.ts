@@ -6,7 +6,7 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/LoggedOut.vue'),
     children: [
-      { path: '', redirect: 'login' },
+      { path: '', component: () => import('../pages/loggedOut/OnboardPage.vue') },
       { path: 'login', component: () => import('../pages/loggedOut/LoginPage.vue') },
       { path: 'register', component: () => import('../pages/loggedOut/RegisterPage.vue') }
     ],
