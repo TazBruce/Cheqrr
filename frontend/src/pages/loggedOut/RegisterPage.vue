@@ -42,7 +42,7 @@
               />
             </template>
           </q-input>
-          <q-btn label="Register" type="submit" color="primary" />
+          <q-btn label="Register" type="submit" color="primary" :loading="isLoading" />
           <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
         </q-form>
       </q-card-section>
@@ -51,35 +51,31 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { useAuth } from '../../stores/auth.store';
 
-export default {
-  name: 'RegisterPage',
-  data () {
-    return {
-      isPwd: ref(true),
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-    }
-  },
-  methods: {
-    onSubmit () {
-      const auth = useAuth();
-      if (this.password !== this.passwordConfirmation) {
-        alert('Password and password confirmation do not match');
-      } else {
-        auth.register(this.email, this.password);
-      }
-    },
-    onReset () {
-      this.email = ''
-      this.password = ''
-      this.passwordConfirmation = ''
-    },
-  },
+let isPwd = ref(true)
+let isLoading = ref(false)
+let email = ref('');
+let password = ref('');
+let passwordConfirmation = ref('');
+
+async function onSubmit () {
+  const auth = useAuth();
+  if (password.value !== passwordConfirmation.value) {
+    alert('Password and password confirmation do not match');
+  } else {
+    isLoading.value = true;
+    await auth.register(email.value, password.value);
+    isLoading.value = false;
+  }
+}
+
+function onReset () {
+  email.value = ''
+  password.value = ''
+  passwordConfirmation.value = ''
 }
 </script>
 
