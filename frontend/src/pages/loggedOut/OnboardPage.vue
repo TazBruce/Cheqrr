@@ -3,9 +3,9 @@
   <q-page class="bg-primary row justify-center items-center">
     <div class="col"/>
     <div class="col-8">
-      <div class="row q-gutter-md">
-        <h3 class="text-center text-white">Cheqrr</h3>
-        <h6 class="text-white">Inspect and manage your equipment here!</h6>
+      <h3 class="text-center text-white">Cheqrr</h3>
+      <h6 class="text-center text-white">Inspect and manage your equipment here!</h6>
+      <div class="q-gutter-y-md">
         <q-btn
           rounded
           class="full-width"
