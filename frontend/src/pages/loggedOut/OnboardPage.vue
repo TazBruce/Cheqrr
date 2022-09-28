@@ -7,20 +7,20 @@
       <h6 class="text-center text-white">Inspect and manage your equipment here!</h6>
       <div class="q-gutter-y-md">
         <q-btn
+          to="login"
           rounded
           class="full-width"
           color="white"
           text-color="primary"
           label="Login"
-          @click="login"
         />
         <q-btn
+          to="register"
           outline
           rounded
           color="white"
           class="full-width"
           label="Register"
-          @click="register"
         />
       </div>
     </div>
@@ -29,16 +29,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-const login = () => {
-  router.push('/login')
-}
-
-const register = () => {
-  router.push('/register')
-}
 </script>
 
 <style scoped>

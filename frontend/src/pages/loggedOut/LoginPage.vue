@@ -3,12 +3,12 @@
     <q-card>
       <q-card-section>
         <q-btn
+          to="/"
           icon="chevron_left"
           flat
           round
           dense
           color="primary"
-          @click="back"
         />
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
@@ -45,9 +45,6 @@
 <script setup>
 import { useAuth } from 'stores/auth.store';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 let isPwd = ref(true)
 let isLoading = ref(false)
@@ -64,10 +61,6 @@ async function onSubmit() {
 function onReset() {
   email.value = ''
   password.value = ''
-}
-
-function back() {
-  router.replace('/')
 }
 
 </script>
