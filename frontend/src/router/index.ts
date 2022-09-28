@@ -47,9 +47,13 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.afterEach((to, from) => {
-    const toDepth = to.path.split('/').length;
+    let toDepth = to.path.split('/').length;
     const fromDepth = from.path.split('/').length;
-    to.meta.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
+    if (to.path === '/') {
+      toDepth = 0;
+    }
+    to.meta.entryTransitionName = toDepth < fromDepth ? 'slideInLeft' : 'slideInRight';
+    to.meta.exitTransitionName = toDepth < fromDepth ? 'slideOutRight' : 'slideOutLeft';
   });
 
   return Router;
