@@ -38,7 +38,6 @@
     ],
     "predeploy": [
       "npm --prefix ./functions install ./functions",
-      "npm --prefix ./functions run lint",
       "npm --prefix ./functions run build"
     ]
   },
