@@ -29,13 +29,17 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": ["npm --prefix ./functions run build"],
     "source": "functions",
     "ignore": [
       "node_modules",
       ".git",
       "firebase-debug.log",
       "firebase-debug.*.log"
+    ],
+    "predeploy": [
+      "npm --prefix ./functions install ./functions",
+      "npm --prefix ./functions run lint",
+      "npm --prefix ./functions run build"
     ]
   },
   "storage": {
