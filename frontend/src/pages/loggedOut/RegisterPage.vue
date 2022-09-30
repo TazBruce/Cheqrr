@@ -61,7 +61,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useAuth } from '../../stores/auth.store';
+import { useAuthStore } from '../../stores/auth.store';
 
 let isPwd = ref(true)
 let isLoading = ref(false)
@@ -70,7 +70,7 @@ let password = ref('');
 let passwordConfirmation = ref('');
 
 async function onSubmit () {
-  const auth = useAuth();
+  const auth = useAuthStore();
   if (password.value !== passwordConfirmation.value) {
     alert('Password and password confirmation do not match');
   } else {

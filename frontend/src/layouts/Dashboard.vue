@@ -49,7 +49,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
-import { useAuth } from 'src/stores/auth.store';
+import { useAuthStore } from 'src/stores/auth.store';
 
 const linksList = [
   {
@@ -79,7 +79,7 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
       signOut() {
-        const auth = useAuth();
+        const auth = useAuthStore();
         auth.signOut();
       }
     }

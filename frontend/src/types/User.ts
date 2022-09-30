@@ -4,4 +4,5 @@ export type User = {
   email: string | null;
   photoURL: string | null;
   phoneNumber: string | null;
+  organisation: string | null;
 };

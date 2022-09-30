@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { useAuth } from 'stores/auth.store';
+import { useAuthStore } from '../../stores/auth.store';
 import { ref } from 'vue';
 
 let isPwd = ref(true)
@@ -52,7 +52,7 @@ let email = ref('');
 let password = ref('');
 
 async function onSubmit() {
-  const auth = useAuth();
+  const auth = useAuthStore();
   isLoading.value = true;
   await auth.signIn(email.value, password.value);
   isLoading.value = false;

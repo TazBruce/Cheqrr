@@ -11,6 +11,15 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/setup',
+    component: () => import('layouts/OutsideOrg.vue'),
+    children: [
+      { path: '', component: () => import('../pages/OutsideOrg/SetupOrg.vue') },
+      { path: 'create-organisation', component: () => import('../pages/OutsideOrg/CreateOrg.vue') },
+      { path: 'join-organisation', component: () => import('../pages/OutsideOrg/JoinOrg.vue') }
+    ],
+  },
+  {
     path: '/dashboard',
     component: () => import('layouts/Dashboard.vue'),
     children: [

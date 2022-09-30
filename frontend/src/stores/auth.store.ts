@@ -5,18 +5,22 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { User } from '../types/User';
+import { useAuth } from '@vueuse/firebase/useAuth';
+
+const { isAuthenticated, user } = useAuth(auth);
 
 /**
  * The auth store.
  */
-export const useAuth = defineStore({
+export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    user: {} as User,
-    isLoggedIn: false as boolean,
+    organisation: null as string | null,
   }),
-  getters: {},
+  getters: {
+    isLoggedIn: () => isAuthenticated.value,
+    user: () => user.value,
+  },
   actions: {
 
     /**
@@ -26,10 +30,8 @@ export const useAuth = defineStore({
      */
     async register(email: string, password: string) {
       await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          this.user = userCredential.user;
-          this.isLoggedIn = true;
-          this.router.push('/dashboard');
+        .then(() => {
+          this.router.push('/setup');
           alert('Registered!');
         })
         .catch((error) => {
@@ -44,9 +46,7 @@ export const useAuth = defineStore({
      */
     async signIn(email: string, password: string) {
       await signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          this.user = userCredential.user;
-          this.isLoggedIn = true;
+        .then(() => {
           this.router.push('/dashboard');
           alert('Signed in!');
         })
@@ -58,8 +58,7 @@ export const useAuth = defineStore({
     async signOut() {
       signOut(auth)
         .then(() => {
-          this.user = {} as User;
-          this.isLoggedIn = false;
+          this.organisation = null;
           this.router.replace('/');
           alert('Signed out!');
         })
