@@ -40,7 +40,7 @@ jobs:
         with:
           args: deploy --only storage,firestore,functions
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHEQRR_3BFB6 }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHEQRR_3BFB6 }}
           PROJECT_PATH: backend
 
       - name: Deploy Frontend
