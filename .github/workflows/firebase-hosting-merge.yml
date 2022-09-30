@@ -36,7 +36,7 @@ jobs:
         run: cd frontend && quasar build -m pwa
 
       - name: Deploy Backend
-        uses: w9jds/firebase-action@master
+        uses: docker://w9jds/firebase-action:master
         with:
           args: deploy --only storage,firestore,functions
         env:
@@ -50,3 +50,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHEQRR_3BFB6 }}'
           channelId: live
           projectId: cheqrr-3bfb6
+          entrypoint: backend
