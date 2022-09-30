@@ -32,9 +32,6 @@ jobs:
       - name: Install Frontend Dependencies
         run: cd frontend && yarn install
 
-      - name: Install Backend Dependencies
-        run: cd backend && npm install
-
       - name: Build Frontend
         run: cd frontend && quasar build -m pwa
 
