@@ -27,10 +27,24 @@ jobs:
       - name: Install Quasar CLI
         run: npm install -g @quasar/cli
 
-      - name: Install Dependencies & Build
-        run: cd frontend && yarn install && quasar build -m pwa
+      - name: Install Frontend Dependencies
+        run: cd frontend && yarn install
 
-      - name: Deploy to Firebase
+      - name: Install Backend Dependencies
+        run: cd backend && npm install
+
+      - name: Build Frontend
+        run: cd frontend && quasar build -m pwa
+
+      - name: Deploy Backend
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only storage,firestore,functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHEQRR_3BFB6 }}
+          PROJECT_PATH: backend
+
+      - name: Deploy Frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
