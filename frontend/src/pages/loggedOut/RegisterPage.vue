@@ -2,14 +2,6 @@
   <q-page>
     <q-card>
       <q-card-section>
-        <q-btn
-          to="/"
-          icon="chevron_left"
-          flat
-          round
-          dense
-          color="primary"
-        />
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
             v-model="email"

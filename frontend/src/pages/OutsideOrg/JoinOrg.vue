@@ -8,26 +8,6 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '../../stores/auth.store';
-import { ref } from 'vue';
-
-let isPwd = ref(true)
-let isLoading = ref(false)
-let email = ref('');
-let password = ref('');
-
-async function onSubmit() {
-  const auth = useAuthStore();
-  isLoading.value = true;
-  await auth.signIn(email.value, password.value);
-  isLoading.value = false;
-}
-
-function onReset() {
-  email.value = ''
-  password.value = ''
-}
-
 </script>
 
 <style scoped>

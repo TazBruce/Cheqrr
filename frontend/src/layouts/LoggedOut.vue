@@ -1,6 +1,14 @@
 <template>
   <q-layout>
     <q-page-container>
+      <q-btn
+        to="/"
+        icon="chevron_left"
+        flat
+        round
+        dense
+        color="primary"
+      />
       <router-view v-slot="{ Component, route }">
         <transition
           appear
