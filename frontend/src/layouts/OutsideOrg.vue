@@ -7,7 +7,7 @@
         </div>
         <div class="col-4">
           <q-btn
-            to="/setup"
+            @click="goBack"
             icon="chevron_left"
             flat
             round
@@ -30,9 +30,19 @@
   </q-layout>
 </template>
 
-<script>
-export default {
-  name: 'OutsideOrg'
+<script setup>
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/auth.store';
+
+const router = useRouter();
+
+function goBack() {
+  if (router.currentRoute.value.path === '/setup') {
+    const auth = useAuthStore();
+    auth.signOut();
+  } else {
+    router.go(-1);
+  }
 }
 </script>
 
