@@ -1,6 +1,14 @@
 <template>
   <q-page>
     <q-card>
+      <q-btn
+        to="/"
+        icon="chevron_left"
+        flat
+        round
+        dense
+        color="primary"
+      />
       <q-card-section>
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
