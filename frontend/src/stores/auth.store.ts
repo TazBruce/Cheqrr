@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { doc, deleteDoc, setDoc } from 'firebase/firestore';
+import { doc, deleteDoc, setDoc, getDoc } from 'firebase/firestore';
 import { useAuth } from '@vueuse/firebase/useAuth';
 import { useFirestore } from '@vueuse/firebase/useFirestore';
 
@@ -81,17 +81,26 @@ export const useAuthStore = defineStore({
      * @param inviteCode The invite code
      */
     async joinOrganisation(inviteCode: string) {
+      if (user.value === null) {
+        alert('You must be logged in to join an organisation.');
+        return;
+      }
       if (this.organisation != null) {
         alert('You are already in an organisation!');
         return;
       }
-      const invite = await queryInviteCode(inviteCode);
-      if (invite == null || invite.organisation == null) {
+      const inviteSnap = await getDoc(doc(db, 'invite-codes', inviteCode))
+      if (!inviteSnap.exists()) {
+        alert('Invalid invite code!');
+        return;
+      }
+      const invite = inviteSnap.data();
+      if (invite == null || invite.orgID == null) {
         alert('Invalid invite code!');
         return;
       }
       await setDoc(doc(db, 'roles', this.user?.uid as string), {
-        orgID: invite.organisation,
+        orgID: invite.orgID,
         role: 'Worker',
       });
       alert('Joined organisation!');
@@ -108,12 +117,3 @@ export const useAuthStore = defineStore({
   },
   persist: true,
 });
-
-/**
- * Queries the database for a given invite code.
- * @param inviteCode The invite code
- */
-async function queryInviteCode(inviteCode: string) {
-  const invite = await useFirestore(doc(db, 'invite-codes', inviteCode));
-  return invite.value;
-}
