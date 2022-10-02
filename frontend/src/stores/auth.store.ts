@@ -4,31 +4,33 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  User
 } from 'firebase/auth';
-import { doc, deleteDoc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
-import { useAuth } from '@vueuse/firebase/useAuth';
+import { doc, deleteDoc, setDoc, getDoc } from 'firebase/firestore';
+import { Role } from 'src/types/Role';
 
-const { isAuthenticated, user } = useAuth(auth);
+type State = {
+  role: Role | null;
+  user: User | null;
+  isLoggedIn: boolean;
+}
 
 /**
  * The auth store.
  */
 export const useAuthStore = defineStore({
   id: 'auth',
-  state: () => ({}),
+  state: (): State => ({
+    role: null,
+    user: null,
+    isLoggedIn: false
+  }),
   getters: {
-    isLoggedIn: () => isAuthenticated.value,
-    user: () => user.value,
-    organisation: () => {
-      if (isAuthenticated.value && user.value) {
-        onSnapshot(doc(db, 'roles', user.value.uid), (doc) => {
-          if (doc.exists()) {
-            return doc.data().orgID;
-          }
-        }, () => {
-          // Logged out
-        });
+    organisation: (state) => {
+      if (state.role === null) {
+        return null;
       }
+      return state.role.orgID;
     }
   },
   actions: {
@@ -39,7 +41,9 @@ export const useAuthStore = defineStore({
      */
     async register(email: string, password: string) {
       await createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
+        .then(async (userCredential) => {
+          this.user = userCredential.user;
+          this.isLoggedIn = true;
           this.router.push('/setup');
           alert('Registered!');
         })
@@ -55,9 +59,21 @@ export const useAuthStore = defineStore({
      */
     async signIn(email: string, password: string) {
       await signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          this.router.push('/dashboard');
-          alert('Signed in!');
+        .then(async (userCredential) => {
+          await getRole(userCredential.user.uid).then((userRole) => {
+            if (userRole === undefined) {
+              alert('Failed to get role');
+              return;
+            }
+            this.role = {
+              orgID: userRole.orgID,
+              role: userRole.role
+            };
+            this.user = userCredential.user;
+            this.isLoggedIn = true;
+            this.router.push('/dashboard');
+            alert('Signed in!');
+          });
         })
         .catch((error) => {
           alert(error.message);
@@ -70,6 +86,9 @@ export const useAuthStore = defineStore({
     async signOut() {
       signOut(auth)
         .then(() => {
+          this.user = null;
+          this.role = null;
+          this.isLoggedIn = false;
           this.router.replace('/');
           alert('Signed out!');
         })
@@ -84,7 +103,7 @@ export const useAuthStore = defineStore({
      * @param inviteCode The invite code
      */
     async joinOrganisation(inviteCode: string) {
-      if (user.value === null) {
+      if (this.user === null) {
         alert('You must be logged in to join an organisation.');
         return;
       }
@@ -123,3 +142,16 @@ export const useAuthStore = defineStore({
   },
   persist: true,
 });
+
+/**
+ * Gets the role of the user.
+ * @param userID The user ID
+ */
+async function getRole(userID: string) {
+  const roleDoc = await getDoc(doc(db, 'roles', userID));
+  if (!roleDoc.exists()) {
+    console.log('Failed to get role');
+    return;
+  }
+  return roleDoc.data();
+}
