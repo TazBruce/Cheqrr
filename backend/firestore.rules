@@ -8,11 +8,11 @@ service cloud.firestore {
     }
 
     match /roles/{roleID} {
-      // Only authenticated users can read roles
-      allow get: if request.auth != null && resource.id == request.auth.uid;
+      // Only authenticated users can read roles that have the same ID as their UID (if the role exists)
+      allow get: if request.auth != null && request.auth.uid == roleID;
 
       // Only authenticated users can write their own roles, the role must be equal to "Worker"
-      allow write: if request.auth != null && request.resource.id == request.auth.uid && request.resource.data.role == "Worker";
+      allow write: if request.auth != null && request.resource.id == request.auth.uid && request.resource.data.role == "Reporter";
     }
   }
 }

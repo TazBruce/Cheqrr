@@ -1,13 +1,8 @@
-import { defineStore } from 'pinia';
-import { auth, db } from 'boot/firebase';
-import {
-  signOut,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  User
-} from 'firebase/auth';
-import { doc, deleteDoc, setDoc, getDoc } from 'firebase/firestore';
-import { Role } from 'src/types/Role';
+import {defineStore} from 'pinia';
+import {auth, db} from 'boot/firebase';
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User} from 'firebase/auth';
+import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import {Role, RoleType} from 'src/types/Role';
 
 type State = {
   role: Role | null;
@@ -61,14 +56,12 @@ export const useAuthStore = defineStore({
       await signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
           await getRole(userCredential.user.uid).then((userRole) => {
-            if (userRole === undefined) {
-              alert('Failed to get role');
-              return;
+            if (userRole != undefined) {
+              this.role = {
+                orgID: userRole.orgID,
+                role: userRole.role
+              };
             }
-            this.role = {
-              orgID: userRole.orgID,
-              role: userRole.role
-            };
             this.user = userCredential.user;
             this.isLoggedIn = true;
             this.router.push('/dashboard');
@@ -123,9 +116,14 @@ export const useAuthStore = defineStore({
       }
       await setDoc(doc(db, 'roles', this.user?.uid as string), {
         orgID: invite.orgID,
-        role: 'Worker',
+        role: 'Reporter',
       });
+      this.role = {
+        orgID: invite.orgID,
+        role: RoleType.Reporter,
+      }
       alert('Joined organisation!');
+      this.router.push('/dashboard');
     },
 
     /**
