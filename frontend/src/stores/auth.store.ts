@@ -5,9 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { doc, deleteDoc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, deleteDoc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { useAuth } from '@vueuse/firebase/useAuth';
-import { useFirestore } from '@vueuse/firebase/useFirestore';
 
 const { isAuthenticated, user } = useAuth(auth);
 
@@ -21,11 +20,15 @@ export const useAuthStore = defineStore({
     isLoggedIn: () => isAuthenticated.value,
     user: () => user.value,
     organisation: () => {
-      const org = useFirestore(doc(db, 'roles', user.value?.uid as string)).value;
-      if (org) {
-        return org
+      if (isAuthenticated.value && user.value) {
+        onSnapshot(doc(db, 'roles', user.value.uid), (doc) => {
+          if (doc.exists()) {
+            return doc.data().orgID;
+          }
+        }, () => {
+          // Logged out
+        });
       }
-      return null;
     }
   },
   actions: {
@@ -106,6 +109,9 @@ export const useAuthStore = defineStore({
       alert('Joined organisation!');
     },
 
+    /**
+     * Leaves the organisation.
+     */
     async leaveOrganisation() {
       if (this.organisation == null) {
         alert('You are not in an organisation!');
