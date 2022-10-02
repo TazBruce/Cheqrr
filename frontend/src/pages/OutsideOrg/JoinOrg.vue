@@ -31,11 +31,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth.store';
 
 const authStore = useAuthStore()
-const router = useRouter()
 
 const inviteCode = ref('')
 const isLoading = ref(false)
