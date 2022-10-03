@@ -142,10 +142,11 @@ export const useAuthStore = defineStore({
       const orgRef = collection(db, 'organisations');
       await addDoc(orgRef, {
         name: orgName,
+        owner: this.user?.uid as string,
       }).then((docRef) => {
         this.role = {
           orgID: docRef.id,
-          role: RoleType.Admin,
+          role: RoleType.Owner,
         }
         alert('Created organisation!');
         this.router.push('/dashboard');

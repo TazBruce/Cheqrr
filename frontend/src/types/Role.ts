@@ -4,6 +4,7 @@ export type Role = {
 }
 
 export enum RoleType {
+  Owner = 'owner',
   Admin = 'admin',
   Maintainer = 'maintainer',
   Reporter = 'reporter',

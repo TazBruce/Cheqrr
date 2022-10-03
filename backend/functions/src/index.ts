@@ -37,10 +37,10 @@ export const orgOnCreate =
             if (data === undefined) {
                 throw new Error('Data is undefined');
             }
-            const userID = data.createdBy;
+            const userID = data.owner;
             console.log(`Adding admin role for user ${userID} in organisation ${orgID}`);
             await firestore.collection('roles').doc(userID).set({
                 orgID,
-                role: 'Admin',
+                role: 'Owner',
             });
         });

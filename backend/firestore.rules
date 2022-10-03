@@ -29,7 +29,9 @@ service cloud.firestore {
       allow update: if request.auth != null && isAdmin();
 
       // Only authenticated users that have no role can create organisations
-      allow create: if request.auth != null && !exists(/databases/$(database)/documents/roles/$(request.auth.uid));
+      allow create: if request.auth != null &&
+                       resource.data.owner == request.auth.uid &&
+                       !exists(/databases/$(database)/documents/roles/$(request.auth.uid));
     }
   }
 }
