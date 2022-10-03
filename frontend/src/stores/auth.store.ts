@@ -151,8 +151,8 @@ export const useAuthStore = defineStore({
         alert('Created organisation!');
         this.router.push('/dashboard');
         return;
-      }).catch(() => {
-        alert('Failed to create organisation!');
+      }).catch((reason) => {
+        alert('Failed to create organisation!: ' + reason);
         return;
       });
     },

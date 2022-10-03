@@ -30,7 +30,7 @@ service cloud.firestore {
 
       // Only authenticated users that have no role can create organisations
       allow create: if request.auth != null &&
-                       resource.data.owner == request.auth.uid &&
+                       request.resource.data.owner == request.auth.uid &&
                        !exists(/databases/$(database)/documents/roles/$(request.auth.uid));
     }
   }
