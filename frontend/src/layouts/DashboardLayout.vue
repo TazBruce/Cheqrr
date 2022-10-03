@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh lpR fFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -10,35 +10,6 @@
           icon="menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-
-        <q-drawer
-          v-model="leftDrawerOpen"
-          v-show="$q.platform.is.desktop"
-          show-if-above
-          :width="200"
-          :breakpoint="500"
-          bordered
-          class="bg-white"
-        >
-          <q-scroll-area class="fit">
-            <q-list>
-              <template v-for="(menuItem, index) in menuList" :key="index">
-                <q-item :to="menuItem.route" replace exact v-ripple :class="{
-                  'text-grey-14': $route.path !== menuItem.route
-                }">
-                  <q-item-section avatar>
-                    <q-icon :name="menuItem.icon" />
-                  </q-item-section>
-                  <q-item-section>
-                    {{ menuItem.label }}
-                  </q-item-section>
-                </q-item>
-                <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
-              </template>
-            </q-list>
-          </q-scroll-area>
-        </q-drawer>
-
         <q-toolbar-title class="text-center">
           Cheqrr
         </q-toolbar-title>
@@ -53,6 +24,33 @@
           />
       </q-toolbar>
     </q-header>
+    <q-drawer
+      v-model="leftDrawerOpen"
+      v-show="$q.platform.is.desktop"
+      show-if-above
+      :width="200"
+      :breakpoint="500"
+      bordered
+      class="bg-white"
+    >
+      <q-scroll-area class="fit">
+        <q-list>
+          <template v-for="(menuItem, index) in menuList" :key="index">
+            <q-item :to="menuItem.route" replace exact v-ripple :class="{
+                  'text-grey-14': $route.path !== menuItem.route
+                }">
+              <q-item-section avatar>
+                <q-icon :name="menuItem.icon" />
+              </q-item-section>
+              <q-item-section>
+                {{ menuItem.label }}
+              </q-item-section>
+            </q-item>
+            <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
+          </template>
+        </q-list>
+      </q-scroll-area>
+    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -102,6 +100,9 @@ const menuList = [
 
 const leftDrawerOpen = ref(true);
 
+/**
+ * Sign out
+ */
 function signOut() {
   const auth = useAuthStore();
   auth.signOut();
