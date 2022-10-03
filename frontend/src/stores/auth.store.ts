@@ -127,6 +127,36 @@ export const useAuthStore = defineStore({
     },
 
     /**
+     * Creates an organisation.
+     * @param orgName The name of the organisation
+     */
+    async createOrganisation(orgName: string) {
+      if (this.user === null) {
+        alert('You must be logged in to create an organisation.');
+        return;
+      }
+      if (this.organisation != null) {
+        alert('You are already in an organisation!');
+        return;
+      }
+      const orgRef = doc(db, 'organisations');
+      await setDoc(orgRef, {
+        name: orgName,
+      }).then(() => {
+        this.role = {
+          orgID: orgRef.id,
+          role: RoleType.Admin,
+        }
+        alert('Created organisation!');
+        this.router.push('/dashboard');
+        return;
+      }).catch(() => {
+        alert('Failed to create organisation!');
+        return;
+      });
+    },
+
+    /**
      * Leaves the organisation.
      */
     async leaveOrganisation() {

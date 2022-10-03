@@ -11,8 +11,25 @@ service cloud.firestore {
       // Only authenticated users can read roles that have the same ID as their UID (if the role exists)
       allow get: if request.auth != null && request.auth.uid == roleID;
 
-      // Only authenticated users can write their own roles, the role must be equal to "Worker"
+      // Only authenticated users can write their own roles, the role must be equal to "Reporter"
       allow write: if request.auth != null && request.resource.id == request.auth.uid && request.resource.data.role == "Reporter";
+    }
+
+    match /organisations/{orgID} {
+      function isAdmin() {
+        let role = get(/databases/$(database)/documents/roles/$(request.auth.uid)).data;
+        return role.role == "Admin" && role.orgID == orgID;
+      }
+
+      // Only authenticated users that have a role with the same orgID can read organisations
+      allow get: if request.auth != null &&
+                    get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
+
+      // Only authenticated users that have the role "Admin" with the same orgID can update organisations
+      allow update: if request.auth != null && isAdmin();
+
+      // Only authenticated users that have no role can create organisations
+      allow create: if request.auth != null && !exists(/databases/$(database)/documents/roles/$(request.auth.uid));
     }
   }
 }

@@ -23,3 +23,22 @@ export const authOnDelete =
         console.log(`Deleting document for user ${user.uid}`);
         await firestore.collection("users").doc(user.uid).delete();
     });
+
+/**
+ * A function that is triggered when an organisation is created.
+ * Adds the organisation and admin role to the user who created it.
+ */
+export const orgOnCreate =
+    functions.firestore.document("organisations/{orgID}").onCreate(async (snap, context) => {
+        const orgID = context.params.orgID;
+        const data = snap.data();
+        if (data === undefined) {
+            throw new Error("Data is undefined");
+        }
+        const userID = data.createdBy;
+        console.log(`Adding admin role for user ${userID} in organisation ${orgID}`);
+        await firestore.collection("roles").doc(userID).set({
+            orgID,
+            role: "Admin",
+        });
+    });

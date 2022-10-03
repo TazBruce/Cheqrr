@@ -39,7 +39,9 @@ const inviteCode = ref('')
 const isLoading = ref(false)
 
 async function joinOrg() {
+  isLoading.value = true;
   await authStore.joinOrganisation(inviteCode.value);
+  isLoading.value = false;
 }
 
 </script>
