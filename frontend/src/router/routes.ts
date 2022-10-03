@@ -23,7 +23,9 @@ const routes: RouteRecordRaw[] = [
     path: '/dashboard',
     component: () => import('layouts/DashboardLayout.vue'),
     children: [
-      { path: '', component: () => import('../pages/Dashboard/IndexPage.vue') },
+      { path: '', component: () => import('../pages/Dashboard/JobsPage.vue') },
+      { path: 'items', component: () => import('../pages/Dashboard/ItemsPage.vue') },
+      { path: 'forms', component: () => import('../pages/Dashboard/FormsPage.vue') },
     ],
   },
 

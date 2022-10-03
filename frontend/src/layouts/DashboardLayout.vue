@@ -29,10 +29,10 @@
         active-color="primary"
         indicator-color="transparent"
         class="text-grey"
-        v-model="tab">
-        <q-tab name="items" label="Items" icon="inventory" />
-        <q-tab name="jobs" label="Jobs" icon="assignment" />
-        <q-tab name="forms" label="Forms" icon="topic" />
+      >
+        <q-route-tab to="/dashboard/items" replace name="items" label="Items" icon="inventory" />
+        <q-route-tab to="/dashboard" replace name="jobs" label="Jobs" icon="assignment" />
+        <q-route-tab to="/dashboard/forms" replace name="forms" label="Forms" icon="topic" />
       </q-tabs>
     </q-footer>
   </q-layout>
@@ -40,9 +40,6 @@
 
 <script setup>
 import { useAuthStore } from 'src/stores/auth.store';
-import {ref} from 'vue';
-
-const tab = ref('images');
 
 function signOut() {
   const auth = useAuthStore();
