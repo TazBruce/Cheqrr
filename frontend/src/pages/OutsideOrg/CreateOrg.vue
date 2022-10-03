@@ -12,7 +12,7 @@
           outlined
           label="Team Name"
           color="primary"
-          :rules="[val => val.length > 0 || 'TIeam name must be at least 1 character long']"
+          :rules="[val => val.length > 0 || 'Team name must be at least 1 character long']"
         />
         <q-btn
           class="q-mx-auto"

@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
 import {auth, db} from 'boot/firebase';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User} from 'firebase/auth';
-import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import {deleteDoc, doc, getDoc, setDoc, addDoc, collection} from 'firebase/firestore';
 import {Role, RoleType} from 'src/types/Role';
 
 type State = {
@@ -139,12 +139,12 @@ export const useAuthStore = defineStore({
         alert('You are already in an organisation!');
         return;
       }
-      const orgRef = doc(db, 'organisations');
-      await setDoc(orgRef, {
+      const orgRef = collection(db, 'organisations');
+      await addDoc(orgRef, {
         name: orgName,
-      }).then(() => {
+      }).then((docRef) => {
         this.role = {
-          orgID: orgRef.id,
+          orgID: docRef.id,
           role: RoleType.Admin,
         }
         alert('Created organisation!');

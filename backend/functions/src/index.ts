@@ -10,7 +10,7 @@ const firestore = admin.firestore();
 export const authOnCreate =
     functions.auth.user().onCreate(async (user) => {
         console.log(`Creating document for user ${user.uid}`);
-        await firestore.collection("users").doc(user.uid).set({
+        await firestore.collection('users').doc(user.uid).set({
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
     });
@@ -21,7 +21,7 @@ export const authOnCreate =
 export const authOnDelete =
     functions.auth.user().onDelete(async (user) => {
         console.log(`Deleting document for user ${user.uid}`);
-        await firestore.collection("users").doc(user.uid).delete();
+        await firestore.collection('users').doc(user.uid).delete();
     });
 
 /**
@@ -29,16 +29,18 @@ export const authOnDelete =
  * Adds the organisation and admin role to the user who created it.
  */
 export const orgOnCreate =
-    functions.firestore.document("organisations/{orgID}").onCreate(async (snap, context) => {
-        const orgID = context.params.orgID;
-        const data = snap.data();
-        if (data === undefined) {
-            throw new Error("Data is undefined");
-        }
-        const userID = data.createdBy;
-        console.log(`Adding admin role for user ${userID} in organisation ${orgID}`);
-        await firestore.collection("roles").doc(userID).set({
-            orgID,
-            role: "Admin",
+    functions.firestore
+        .document('organisations/{orgID}')
+        .onCreate(async (snap, context) => {
+            const orgID = context.params.orgID;
+            const data = snap.data();
+            if (data === undefined) {
+                throw new Error('Data is undefined');
+            }
+            const userID = data.createdBy;
+            console.log(`Adding admin role for user ${userID} in organisation ${orgID}`);
+            await firestore.collection('roles').doc(userID).set({
+                orgID,
+                role: 'Admin',
+            });
         });
-    });
