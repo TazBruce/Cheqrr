@@ -3,6 +3,7 @@ import {auth, db} from 'boot/firebase';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User} from 'firebase/auth';
 import {deleteDoc, doc, getDoc, setDoc, addDoc, collection} from 'firebase/firestore';
 import {Role, RoleType} from 'src/types/Role';
+import {useItemsStore} from "stores/items.store";
 
 type State = {
   role: Role | null;
@@ -79,6 +80,7 @@ export const useAuthStore = defineStore({
     async signOut() {
       signOut(auth)
         .then(() => {
+          useItemsStore().$reset();
           this.$reset();
           this.router.replace('/');
           alert('Signed out!');
