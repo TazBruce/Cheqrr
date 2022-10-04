@@ -11,4 +11,6 @@ export type Item = {
   description: string;
   status: ItemStatus;
   image: string;
+  information: Map<string, string | boolean | number | Date>
 }
+
