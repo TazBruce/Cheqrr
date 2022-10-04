@@ -16,22 +16,53 @@ service cloud.firestore {
     }
 
     match /organisations/{orgID} {
-      function isAdmin() {
+      // Function for comparing roleTypes
+      // Returns true if role1 is higher or equal to role2
+      // RoleTypes are: "Owner", "Admin", "Maintainer", "Repairer", "Reporter"
+      function compareRole(role1, role2) {
+        return role1 == role2
+               || (role1 == "Owner")
+               || (role1 == "Admin" && role2 != "Owner")
+               || (role1 == "Maintainer" && role2 != "Owner" && role2 != "Admin")
+               || (role1 == "Repairer" && role2 != "Owner" && role2 != "Admin" && role2 != "Maintainer")
+               || (role1 == "Reporter" && role2 != "Owner" && role2 != "Admin" && role2 != "Maintainer" && role2 != "Repairer");
+      }
+
+      // Function for checking if a user is a member of an organisation
+      function isRole(roleType) {
         let role = get(/databases/$(database)/documents/roles/$(request.auth.uid)).data;
-        return role.role == "Admin" && role.orgID == orgID;
+        return role.orgID == orgID && compareRole(role.role, roleType);
       }
 
       // Only authenticated users that have a role with the same orgID can read organisations
       allow get: if request.auth != null &&
                     get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
 
-      // Only authenticated users that have the role "Admin" with the same orgID can update organisations
-      allow update: if request.auth != null && isAdmin();
+      // Only authenticated users that have the role "Owner" with the same orgID can update organisations
+      allow update: if request.auth != null && isRole("Owner");
 
       // Only authenticated users that have no role can create organisations
       allow create: if request.auth != null &&
                        request.resource.data.owner == request.auth.uid &&
                        !exists(/databases/$(database)/documents/roles/$(request.auth.uid));
+
+      match /items/{itemID} {
+        // Only authenticated users that have a role with the same orgID can read items
+        allow get: if request.auth != null &&
+                      get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
+
+        // Only authenticated users that at least have the role "Maintainer" with the same orgID can manage items
+        allow update, create, delete: if request.auth != null && isRole("Maintainer");
+      }
+
+      match /jobs/{jobID} {
+        // Only authenticated users that have a role with the same orgID can read jobs
+        allow get: if request.auth != null &&
+                      get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
+
+        // Only authenticated users that at least have the role "Repairer" with the same orgID can manage jobs
+        allow update, create, delete: if request.auth != null && isRole("Repairer");
+      }
     }
   }
 }
