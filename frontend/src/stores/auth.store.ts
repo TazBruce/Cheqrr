@@ -79,9 +79,7 @@ export const useAuthStore = defineStore({
     async signOut() {
       signOut(auth)
         .then(() => {
-          this.user = null;
-          this.role = null;
-          this.isLoggedIn = false;
+          this.$reset();
           this.router.replace('/');
           alert('Signed out!');
         })
