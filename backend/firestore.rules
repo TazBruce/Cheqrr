@@ -48,7 +48,7 @@ service cloud.firestore {
 
       match /items/{itemID} {
         // Only authenticated users that have a role with the same orgID can read items
-        allow get: if request.auth != null &&
+        allow read: if request.auth != null &&
                       get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
 
         // Only authenticated users that at least have the role "Maintainer" with the same orgID can manage items
@@ -57,7 +57,7 @@ service cloud.firestore {
 
       match /jobs/{jobID} {
         // Only authenticated users that have a role with the same orgID can read jobs
-        allow get: if request.auth != null &&
+        allow read: if request.auth != null &&
                       get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
 
         // Only authenticated users that at least have the role "Repairer" with the same orgID can manage jobs
