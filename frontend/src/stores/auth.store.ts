@@ -3,7 +3,7 @@ import {auth, db} from 'boot/firebase';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User} from 'firebase/auth';
 import {deleteDoc, doc, getDoc, setDoc, addDoc, collection} from 'firebase/firestore';
 import {Role, RoleType} from 'src/types/Role';
-import {useItemsStore} from "stores/items.store";
+import {useItemsStore} from 'stores/items.store';
 
 type State = {
   role: Role | null;
@@ -62,6 +62,7 @@ export const useAuthStore = defineStore({
                 orgID: userRole.orgID,
                 role: userRole.role
               };
+              useItemsStore().fetchItems();
             }
             this.user = userCredential.user;
             this.isLoggedIn = true;
@@ -122,6 +123,7 @@ export const useAuthStore = defineStore({
         orgID: invite.orgID,
         role: RoleType.Reporter,
       }
+      await useItemsStore().fetchItems();
       alert('Joined organisation!');
       this.router.push('/dashboard');
     },

@@ -24,7 +24,6 @@ export const useItemsStore = defineStore({
       }
       const itemsCollection = createCollection<Item>('organisations/' + useAuthStore().organisation + '/items');
       this.items = (await getDocs(itemsCollection)).docs.map((doc) => doc.data());
-      console.log(this.items);
     },
 
     /**
