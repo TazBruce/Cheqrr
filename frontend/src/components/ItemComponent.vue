@@ -1,17 +1,15 @@
 <template>
-  <q-item
-    clickable
-    tag="a"
-    target="_blank"
-  >
-    <q-item-section>
-      {{ item.description }}
-    </q-item-section>
-
-    <q-item-section>
-      <q-item-label>{{ item.name }}</q-item-label>
-    </q-item-section>
-  </q-item>
+  <q-card class="text-center" style="width: 150px; height: auto;">
+    <q-card-section>
+      <img src="https://via.placeholder.com/150" class="responsive"  alt="{{item.name}}"/>
+    </q-card-section>
+    <q-card-section>
+      <div class="text-h6">{{ item.name }}</div>
+    </q-card-section>
+    <q-card-section>
+      <div class="text-subtitle2">{{ item.description }}</div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
