@@ -25,7 +25,7 @@ const props = defineProps<{
 }>();
 
 function navigateToItem() {
-  router.push({ name: 'viewItem', params: { id: props.item.id.toString() } });
+  router.push({ name: 'viewItem', params: { id: props.item.id } });
 }
 
 /**
