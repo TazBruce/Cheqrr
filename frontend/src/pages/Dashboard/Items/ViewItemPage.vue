@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-gutter-y-md">
     <q-breadcrumbs
       class="q-mb-md"
       :separator="`>`"
@@ -25,6 +25,40 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <q-card class="full-width full-height">
+        <q-tabs
+          v-model="tab"
+          dense
+          align="justify"
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          narrow-indicator
+        >
+          <q-tab name="jobs" label="Jobs" />
+          <q-tab name="comments" label="Comments" />
+          <q-tab name="info" label="Info" />
+        </q-tabs>
+        <q-separator />
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="jobs">
+            <div class="text-h6">Jobs</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="comments">
+            <div class="text-h6">Comments</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="info">
+            <div class="text-h6">Info</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -41,6 +75,7 @@ const props = defineProps<{
 }>()
 
 const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
+const tab = ref('jobs');
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
