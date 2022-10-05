@@ -11,20 +11,16 @@
       <q-breadcrumbs-el :label="item.name" class="text-grey-7" />
     </q-breadcrumbs>
     <div class="row q-gutter-x-sm">
-      <div class="col-4">
-        <q-img :src="getImgUrl(item.image)" class="responsive" alt="{{item.name}}"/>
-      </div>
-      <div class="col">
-        <div class="column" style="height: 170px">
-          <div class="col-8 bg-white">
-            <div class="text-h6 wrap ellipsis-3-lines">{{item.name}}</div>
-            <div class="text-subtitle1 text-grey-8">{{item.description}}</div>
-          </div>
-          <div class="col-4">
-            <div class="row q-gutter-x-xs bg-white self-end">
-              <q-avatar size="xs" :class="getItemStatusColor(item.status)"></q-avatar>
-              <div class="text-subtitle2">{{ item.status }}</div>
-            </div>
+      <q-img :src="getImgUrl(item.image)" style="max-width: 140px;" class="q-responsive" alt="{{item.name}}"/>
+      <div class="column" style="height: 170px">
+        <div class="col-10">
+          <div class="text-h6 wrap ellipsis-3-lines">{{item.name}}</div>
+          <div class="text-subtitle1 text-grey-8 wrap ellipsis-2-lines">{{item.description}}</div>
+        </div>
+        <div class="col-2">
+          <div class="row q-gutter-x-xs self-end">
+            <q-avatar size="xs" :class="getItemStatusColor(item.status)"></q-avatar>
+            <div class="text-subtitle2">{{ item.status }}</div>
           </div>
         </div>
       </div>
