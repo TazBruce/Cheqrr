@@ -32,6 +32,13 @@ export const useItemsStore = defineStore({
     addItem(item: Item) {
       this.items.push(item);
     },
+
+    /**
+     * Get an item from the store
+     */
+    getItem(id: string): Item | undefined {
+      return this.items.find((item) => item.id === id);
+    }
   },
   persist: true
 });
