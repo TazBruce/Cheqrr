@@ -54,12 +54,9 @@
             </q-tab-panel>
 
             <q-tab-panel name="info">
-              <div class="text-h6">Info</div>
+              <div class="text-h6">Information</div>
               <q-scroll-area class="absolute fit full-width" visible>
-                <div v-for="n in 100" :key="n" class="q-py-xs">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit, sed do eiusmod tempor incididunt ut labore et
-                </div>
+                <InfoComponent v-for="key in Object.keys(item.information)" :key="key" :info="key" :value="item.information[key]" />
               </q-scroll-area>
             </q-tab-panel>
           </q-tab-panels>
@@ -74,6 +71,7 @@ import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
+import InfoComponent from "components/InfoComponent.vue";
 
 const router = useRouter();
 
@@ -83,6 +81,8 @@ const props = defineProps<{
 
 const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
 const tab = ref('jobs');
+
+console.log(item.value);
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
