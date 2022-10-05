@@ -1,8 +1,8 @@
 export enum ItemStatus {
-  available = 'available',
-  underMaintenance = 'underMaintenance',
-  damaged = 'damaged',
-  unavailable = 'unavailable',
+  available = 'Available',
+  maintenance = 'Maintenance',
+  flagged = 'Flagged',
+  unavailable = 'Unavailable',
 }
 
 export type Item = {

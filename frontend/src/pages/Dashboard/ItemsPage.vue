@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <h1 class="text-h5">Items</h1>
-    <q-list class="q-gutter-md row">
+    <q-list class="q-gutter-md row" style="padding-left: 10px">
       <ItemComponent
         v-for="item in items"
         :key="item.id"
