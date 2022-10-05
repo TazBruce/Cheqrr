@@ -55,13 +55,22 @@
 
             <q-tab-panel name="info">
               <div class="text-h6">Information</div>
-              <q-table
+              <q-markup-table
                 class="full-height"
-                virtual-scroll
-                :rows-per-page-options="[0]"
-                :columns="infoHeaders"
-                :rows="infoRows"
-              />
+              >
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr v-for="key in Object.keys(item.information)" v-bind:key="key">
+                  <td key="key" class="text-center">{{key}}</td>
+                  <td key="value" class="text-center">{{item.information[key]}}</td>
+                </tr>
+                </tbody>
+              </q-markup-table>
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -71,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import {Item, getImgUrl, getItemStatusColor, getObjectList} from 'src/types/Item';
+import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
@@ -88,13 +97,6 @@ const tab = ref('jobs');
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
 }
-
-const infoHeaders = [
-  {name: 'key', label: 'Key', field: 'key', align: 'left', sortable: true},
-  {name: 'value', label: 'Value', field: 'value', align: 'left', sortable: true},
-]
-
-const infoRows = getObjectList(item.value?.information);
 </script>
 
 <style scoped>
