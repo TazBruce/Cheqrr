@@ -11,7 +11,24 @@ export type Item = {
   description: string;
   status: ItemStatus;
   image: string;
-  information: Map<string, string | boolean | number | Date>
+  information: Record<string, unknown>;
+}
+
+/**
+ * Converts a firebase map into a list of objects
+ * @param obj The object to convert
+ */
+export function getObjectList(obj: Record<string, unknown> | unknown): Record<string, unknown>[] {
+  if (obj) {
+    return Object.keys(obj).map((key) => {
+      return {
+        key,
+        value: obj[key as keyof typeof obj]
+      };
+    });
+  } else {
+    return [];
+  }
 }
 
 /**
