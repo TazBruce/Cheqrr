@@ -1,7 +1,7 @@
 <template>
   <q-card @click="navigateToItem" v-ripple class="cursor-pointer q-hoverable text-left" style="width: 150px; height: auto;">
     <q-card-section class="no-padding bg-grey-3">
-      <img :src="getImgUrl(item.image)" class="responsive"  alt="{{item.name}}"/>
+      <q-img :src="getImgUrl(item.image)" class="responsive"  alt="{{item.name}}"/>
     </q-card-section>
     <q-card-section class="bg-grey-3 q-gutter-y-xs" style="padding-top: 0; padding-bottom: 5px">
       <div class="text-body1 ellipsis">{{ item.name }}</div>

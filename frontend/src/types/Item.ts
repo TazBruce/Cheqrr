@@ -19,7 +19,7 @@ export type Item = {
  * @param image The image
  */
 export function getImgUrl(image: string): string {
-  return image !== '' ? image : 'https://via.placeholder.com/150x150/ffffff/969696?text=PLACEHOLDER';
+  return image !== '' ? image : 'https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER';
 }
 
 /**

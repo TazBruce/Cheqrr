@@ -8,14 +8,32 @@
       :active-class="`text-primary`"
     >
       <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.back()" />
-      <q-breadcrumbs-el :label="item.name" />
+      <q-breadcrumbs-el :label="item.name" class="text-grey-7" />
     </q-breadcrumbs>
-    <h1 class="text-h5">{{item.name}}</h1>
+    <div class="row q-gutter-x-sm">
+      <div class="col-4">
+        <q-img :src="getImgUrl(item.image)" class="responsive" alt="{{item.name}}"/>
+      </div>
+      <div class="col">
+        <div class="column" style="height: 170px">
+          <div class="col-8 bg-white">
+            <div class="text-h6 wrap ellipsis-3-lines">{{item.name}}</div>
+            <div class="text-subtitle1 text-grey-8">{{item.description}}</div>
+          </div>
+          <div class="col-4">
+            <div class="row q-gutter-x-xs bg-white self-end">
+              <q-avatar size="xs" :class="getItemStatusColor(item.status)"></q-avatar>
+              <div class="text-subtitle2">{{ item.status }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {Item} from 'src/types/Item';
+import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
