@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw, RouterView } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,7 +24,14 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/DashboardLayout.vue'),
     children: [
       { path: '', component: () => import('../pages/Dashboard/JobsPage.vue') },
-      { path: 'items', component: () => import('pages/Dashboard/Items/ItemsPage.vue') },
+      { path: 'items', component: RouterView,
+        children: [
+          { path: '', component: () => import('../pages/Dashboard/Items/ItemsPage.vue') },
+          { path: 'create', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue') },
+          { name: 'editItem', path: 'edit/:id', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue') },
+          { name: 'viewItem', path: ':id', component: () => import('../pages/Dashboard/Items/ViewItemPage.vue'), props: true }
+        ]
+      },
       { path: 'forms', component: () => import('../pages/Dashboard/FormsPage.vue') },
     ],
   },
@@ -33,6 +40,7 @@ const routes: RouteRecordRaw[] = [
   // Always leave this as last one,
   // but you can also remove it
   {
+    name: '404',
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },

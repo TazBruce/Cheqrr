@@ -1,5 +1,5 @@
 <template>
-  <q-card v-ripple class="cursor-pointer q-hoverable text-left" style="width: 150px; height: auto;">
+  <q-card @click="navigateToItem" v-ripple class="cursor-pointer q-hoverable text-left" style="width: 150px; height: auto;">
     <q-card-section class="no-padding bg-grey-3">
       <img :src="getImgUrl(item.image)" class="responsive"  alt="{{item.name}}"/>
     </q-card-section>
@@ -16,10 +16,17 @@
 
 <script setup lang="ts">
 import {Item} from 'src/types/Item';
+import { useRouter } from 'vue-router'
 
-defineProps<{
+const router = useRouter()
+
+const props = defineProps<{
   item: Item;
 }>();
+
+function navigateToItem() {
+  router.push({ name: 'viewItem', params: { id: props.item.id.toString() } });
+}
 
 /**
  * Get the image url
