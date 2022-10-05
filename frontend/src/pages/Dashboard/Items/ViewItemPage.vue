@@ -93,6 +93,12 @@
         </q-card>
       </div>
     </div>
+    <InfoModal
+      :show="showInfoModal"
+      :property="selectedPropertyKey"
+      :value="selectedPropertyValue"
+      @close="showInfoModal = false"
+    />
   </q-page>
 </template>
 
@@ -101,6 +107,7 @@ import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
+import InfoModal from 'components/InfoModal.vue';
 
 const router = useRouter();
 
@@ -110,6 +117,9 @@ const props = defineProps<{
 
 const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
 const tab = ref('jobs');
+const showInfoModal = ref(false);
+const selectedPropertyKey = ref('');
+const selectedPropertyValue = ref('');
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
@@ -123,6 +133,12 @@ function deleteItemInformation(key: string) {
   if (item.value !== undefined) {
     useItemsStore().deleteInformation(item.value.id, key);
   }
+}
+
+function editItemInformation(key: string) {
+  selectedPropertyKey.value = key;
+  selectedPropertyValue.value = item.value?.information[key].toString() ?? '';
+  showInfoModal.value = true;
 }
 </script>
 
