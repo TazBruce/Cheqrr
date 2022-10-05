@@ -26,38 +26,45 @@
       </div>
     </div>
     <div class="row">
-      <q-card class="full-width full-height">
-        <q-tabs
-          v-model="tab"
-          dense
-          align="justify"
-          class="text-grey"
-          active-color="primary"
-          indicator-color="primary"
-          narrow-indicator
-        >
-          <q-tab name="jobs" label="Jobs" />
-          <q-tab name="comments" label="Comments" />
-          <q-tab name="info" label="Info" />
-        </q-tabs>
-        <q-separator />
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="jobs">
-            <div class="text-h6">Jobs</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
+      <div class="column full-height full-width">
+        <q-card class="col-auto absolute fit">
+          <q-tabs
+            v-model="tab"
+            dense
+            align="justify"
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            narrow-indicator
+          >
+            <q-tab name="jobs" label="Jobs" />
+            <q-tab name="comments" label="Comments" />
+            <q-tab name="info" label="Info" />
+          </q-tabs>
+          <q-separator />
+          <q-tab-panels v-model="tab" animated class="absolute fit">
+            <q-tab-panel name="jobs">
+              <div class="text-h6">Jobs</div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </q-tab-panel>
 
-          <q-tab-panel name="comments">
-            <div class="text-h6">Comments</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
+            <q-tab-panel name="comments">
+              <div class="text-h6">Comments</div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </q-tab-panel>
 
-          <q-tab-panel name="info">
-            <div class="text-h6">Info</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card>
+            <q-tab-panel name="info">
+              <div class="text-h6">Info</div>
+              <q-scroll-area class="absolute fit full-width" visible>
+                <div v-for="n in 100" :key="n" class="q-py-xs">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing
+                  elit, sed do eiusmod tempor incididunt ut labore et
+                </div>
+              </q-scroll-area>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card>
+      </div>
     </div>
   </q-page>
 </template>
