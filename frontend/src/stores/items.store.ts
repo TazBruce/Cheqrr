@@ -52,10 +52,22 @@ export const useItemsStore = defineStore({
      */
     async deleteInformation(itemID: string, informationKey: string) {
       const item = this.getItem(itemID);
-      if (item === undefined) {
+      if (item === undefined || informationKey === '' ) {
         return;
       }
       delete item.information[informationKey];
+      await updateItem(item);
+    },
+
+    /**
+     * Updates an information property of a given item
+     */
+    async updateInformation(itemID: string, informationKey: string, informationValue: string) {
+      const item = this.getItem(itemID);
+      if (item === undefined || informationKey === '' || informationValue === '') {
+        return;
+      }
+      item.information[informationKey] = informationValue;
       await updateItem(item);
     }
   },
