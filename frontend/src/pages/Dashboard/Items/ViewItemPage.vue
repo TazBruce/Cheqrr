@@ -62,12 +62,29 @@
                   <tr>
                     <th>Property</th>
                     <th>Value</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                 <tr v-for="key in Object.keys(item.information)" v-bind:key="key">
                   <td key="key" class="text-center">{{key}}</td>
                   <td key="value" class="text-center">{{item.information[key]}}</td>
+                  <td key="actions" class="text-center">
+                    <q-btn
+                      class="q-mr-sm"
+                      color="primary"
+                      text-color="white"
+                      icon="edit"
+                      @click="editItemInformation(key)"
+                    />
+                    <q-btn
+                      class="q-ml-sm"
+                      color="negative"
+                      text-color="white"
+                      icon="delete"
+                      @click="deleteItemInformation(key)"
+                    />
+                  </td>
                 </tr>
                 </tbody>
               </q-markup-table>
@@ -96,6 +113,16 @@ const tab = ref('jobs');
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
+}
+
+/**
+ * Delete item information
+ * @param key
+ */
+function deleteItemInformation(key: string) {
+  if (item.value !== undefined) {
+    useItemsStore().deleteInformation(item.value.id, key);
+  }
 }
 </script>
 
