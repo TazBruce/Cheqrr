@@ -61,7 +61,7 @@
   </q-markup-table>
 </template>
 <script setup lang="ts">
-import {defineProps, ref} from 'vue'
+import {ref} from 'vue'
 import {useItemsStore} from 'stores/items.store';
 import {useQuasar} from 'quasar';
 import {Item} from 'src/types/Item';

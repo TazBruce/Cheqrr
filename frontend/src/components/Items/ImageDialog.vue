@@ -34,7 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 import { useItemsStore } from 'stores/items.store';

@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import {Item, getItemStatusColor, getImgUrl} from 'src/types/Item';
+import {Item, getItemStatusColor} from 'src/types/Item';
 import { useRouter } from 'vue-router'
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
