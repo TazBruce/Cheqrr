@@ -5,8 +5,8 @@
     persistent
   >
     <q-card>
-      <q-card-section>
-        <q-img :src="imageSrc" alt="camera"/>
+      <q-card-section class="q-gutter-y-sm">
+        <q-img class="bg-grey-6" :src="imageSrc" alt="camera"/>
         <q-btn color="primary" label="Get Picture" @click="captureImage" />
       </q-card-section>
       <q-card-actions align="right">
