@@ -1,7 +1,7 @@
 import { Item } from 'src/types/Item';
 import { defineStore } from 'pinia';
 import { db, storage } from 'boot/firebase';
-import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { ref, uploadString } from 'firebase/storage';
 import { DocumentData, collection, getDocs, CollectionReference, doc, setDoc } from 'firebase/firestore';
 import { useAuthStore } from 'stores/auth.store';
 
@@ -83,19 +83,19 @@ export const useItemsStore = defineStore({
     /**
      * Uploads an image to Firebase Storage and updates the image property of the given item
      * @param itemID The ID of the item
-     * @param image The image to upload
+     * @param image The base64 of an image to upload
      */
-    async uploadImage(itemID: string, image: File) {
+    async uploadImage(itemID: string, image: string | undefined) {
       const item = this.getItem(itemID);
-      if (item === undefined) {
+      if (item === undefined || image === undefined) {
         return;
       }
       const metadata = {
-        contentType: image.type,
+        contentType: 'image/jpeg',
         name: itemID
       }
-      const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/items/`);
-      await uploadBytes(storageRef, image, metadata);
+      const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/items/${itemID}`);
+      await uploadString(storageRef, image, 'base64', metadata);
     }
   },
   persist: true
