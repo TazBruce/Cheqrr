@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'items', component: RouterView,
         children: [
           { path: '', component: () => import('../pages/Dashboard/Items/ItemsPage.vue') },
-          { path: 'create', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue') },
+          { name: 'createItem', path: 'create', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue') },
           { name: 'editItem', path: 'edit/:id', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue') },
           { name: 'viewItem', path: ':id', component: () => import('../pages/Dashboard/Items/ViewItemPage.vue'), props: true }
         ]

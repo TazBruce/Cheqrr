@@ -8,6 +8,9 @@
         :item="item"
       />
     </q-list>
+    <q-page-sticky position="bottom-right" :offset="[18, 50]">
+      <q-btn to="items/create" fab icon="add" color="primary" />
+    </q-page-sticky>
   </q-page>
 </template>
 
