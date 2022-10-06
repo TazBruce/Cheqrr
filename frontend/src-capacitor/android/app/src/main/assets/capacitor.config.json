@@ -1,10 +1,10 @@
 {
-  "appId": "org.cheqrr.app",
-  "appName": "Cheqrr",
-  "bundledWebRuntime": false,
-  "npmClient": "yarn",
-  "webDir": "www",
-  "server": {
-    "url": "http://172.23.0.1:9500"
-  }
+	"appId": "org.cheqrr.app",
+	"appName": "Cheqrr",
+	"bundledWebRuntime": false,
+	"npmClient": "yarn",
+	"webDir": "www",
+	"server": {
+		"url": "http://172.23.0.1:9500"
+	}
 }
