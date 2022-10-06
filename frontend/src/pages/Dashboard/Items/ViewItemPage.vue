@@ -93,12 +93,6 @@
         </q-card>
       </div>
     </div>
-    <InfoModal
-      :show="showInfoModal"
-      :property="selectedPropertyKey"
-      :value="selectedPropertyValue"
-      @close="showInfoModal = false"
-    />
   </q-page>
 </template>
 
@@ -107,9 +101,11 @@ import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
-import InfoModal from 'components/InfoModal.vue';
+import {useQuasar} from 'quasar'
+import InfoDialog from '../../../components/Dialogs/InfoDialog.vue';
 
 const router = useRouter();
+const $q = useQuasar();
 
 const props = defineProps<{
   id: string;
@@ -117,7 +113,6 @@ const props = defineProps<{
 
 const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
 const tab = ref('jobs');
-const showInfoModal = ref(false);
 const selectedPropertyKey = ref('');
 const selectedPropertyValue = ref('');
 
@@ -127,7 +122,7 @@ if (item.value === undefined) {
 
 /**
  * Delete item information
- * @param key
+ * @param key property key
  */
 function deleteItemInformation(key: string) {
   if (item.value !== undefined) {
@@ -135,10 +130,24 @@ function deleteItemInformation(key: string) {
   }
 }
 
+/**
+ * Edit item information
+ * @param key property key
+ */
 function editItemInformation(key: string) {
   selectedPropertyKey.value = key;
   selectedPropertyValue.value = item.value?.information[key].toString() ?? '';
-  showInfoModal.value = true;
+  $q.dialog({
+    component: InfoDialog,
+    componentProps: {
+      propertyKey: selectedPropertyKey.value,
+      propertyValue: selectedPropertyValue.value,
+    },
+  }).onOk((payload) => {
+    if (item.value !== undefined) {
+      useItemsStore().updateInformation(item.value.id, payload.property, payload.value);
+    }
+  });
 }
 </script>
 

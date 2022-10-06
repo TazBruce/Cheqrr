@@ -1,24 +1,22 @@
 <template>
-  <q-dialog :model-value="show">
+  <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card>
       <q-card-section class="row items-center">
         <q-avatar icon="info" color="primary" text-color="white" />
-        <div class="text-h6 q-ml-sm">Information</div>
+        <div class="text-h6 q-ml-sm">Update Property</div>
       </q-card-section>
       <q-card-section>
         <q-input
-          :model-value="property"
+          v-model="propertyKey"
           label="Property"
           filled
           dense
-          clearable
         />
         <q-input
-          :model-value="value"
+          v-model="propertyValue"
           label="Value"
           filled
           dense
-          clearable
         />
       </q-card-section>
       <q-card-actions align="right">
@@ -41,24 +39,29 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
+import { useDialogPluginComponent } from 'quasar';
+import { ref } from 'vue';
 
 const props = defineProps<{
-  property: string;
-  value: string;
-  show: boolean;
+  propertyKey: string;
+  propertyValue: string;
 }>();
 
-const emits = defineEmits<{
-  (e: 'save', property: string, value: string): void;
-  (e: 'close'): void;
-}>()
+defineEmits([
+  ...useDialogPluginComponent.emits,
+])
+
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+const propertyKey = ref(props.propertyKey);
+const propertyValue = ref(props.propertyValue);
 
 function save() {
-  emits('save', props.property, props.value);
+  onDialogOK({ property: propertyKey.value, value: propertyValue.value })
 }
 
 function close() {
-  emits('close');
+  onDialogCancel()
 }
 </script>
 

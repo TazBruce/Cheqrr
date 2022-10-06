@@ -11,7 +11,7 @@ export type Item = {
   description: string;
   status: ItemStatus;
   image: string;
-  information: Record<string, unknown>;
+  information: Record<string, string | boolean | number>;
 }
 
 /**
