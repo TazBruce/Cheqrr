@@ -69,11 +69,9 @@ import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
-import {useQuasar} from 'quasar'
 import InfoTable from '../../../components/Items/Info/InfoTable.vue';
 
 const router = useRouter();
-const $q = useQuasar();
 
 const props = defineProps<{
   id: string;
