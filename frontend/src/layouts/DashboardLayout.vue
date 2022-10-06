@@ -27,7 +27,6 @@
     <q-drawer
       v-model="leftDrawerOpen"
       v-show="$q.platform.is.desktop"
-      show-if-above
       :width="200"
       :breakpoint="500"
       bordered
@@ -98,7 +97,7 @@ const menuList = [
   },
 ]
 
-const leftDrawerOpen = ref(true);
+const leftDrawerOpen = ref(false);
 
 /**
  * Sign out
