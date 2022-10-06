@@ -11,7 +11,22 @@
       <q-breadcrumbs-el label="Create Item" class="text-grey-7" />
     </q-breadcrumbs>
     <h1 class="text-h5">Create Item</h1>
-    <q-form @submit="onSubmit">
+    <q-form @submit="onSubmit" class="q-gutter-y-sm">
+      <q-img
+        class="q-responsive cursor-pointer q-hoverable bg-primary"
+        v-ripple
+        :src="imageSrc"
+        style="max-width: 140px; height: 140px;"
+        alt="Item Image"
+        @click="updateItemImage"
+      >
+        <q-btn
+          class="absolute-center"
+          flat
+          text-color="white"
+          icon="photo_camera"
+        />
+      </q-img>
       <q-input
         v-model="name"
         label="Name"
@@ -36,15 +51,35 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import {Camera, CameraResultType} from '@capacitor/camera';
 
 const router = useRouter();
 
 const name = ref('');
 const description = ref('');
+const imageSrc = ref('');
+const imageBase64 = ref('');
 
 const onSubmit = () => {
   console.log('onSubmit');
 };
+
+async function updateItemImage() {
+  const image = await Camera.getPhoto({
+    quality: 90,
+    allowEditing: true,
+    resultType: CameraResultType.Base64
+  })
+
+  // The result will vary on the value of the resultType option.
+  // CameraResultType.Uri - Get the result from image.webPath
+  // CameraResultType.Base64 - Get the result from image.base64String
+  // CameraResultType.DataUrl - Get the result from image.dataUrl
+  if (image.base64String) {
+    imageSrc.value = 'data:image/png;base64,'+ image.base64String;
+    imageBase64.value = image.base64String;
+  }
+}
 </script>
 
 <style scoped>

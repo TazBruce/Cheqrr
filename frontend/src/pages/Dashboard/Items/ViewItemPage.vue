@@ -15,7 +15,7 @@
         class="q-responsive cursor-pointer q-hoverable"
         v-ripple
         :src="itemImage"
-        style="max-width: 140px;"
+        style="width: 160px; height: 160px;"
         alt="{{item.name}}"
         @click="updateItemImage"
       >
