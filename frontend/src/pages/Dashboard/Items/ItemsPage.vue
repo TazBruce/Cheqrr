@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useItemsStore } from 'stores/items.store';
-import ItemComponent from 'components/ItemComponent.vue';
+import ItemComponent from 'components/Items/ItemComponent.vue';
 
 const { items } = useItemsStore()
 </script>

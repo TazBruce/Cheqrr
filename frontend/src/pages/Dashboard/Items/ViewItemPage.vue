@@ -102,7 +102,7 @@ import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import {useQuasar} from 'quasar'
-import InfoDialog from '../../../components/Dialogs/InfoDialog.vue';
+import InfoDialog from 'components/Items/Info/InfoDialog.vue';
 
 const router = useRouter();
 const $q = useQuasar();
