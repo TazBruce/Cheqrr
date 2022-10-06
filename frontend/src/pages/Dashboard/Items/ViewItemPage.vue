@@ -11,7 +11,21 @@
       <q-breadcrumbs-el :label="item.name" class="text-grey-7" />
     </q-breadcrumbs>
     <div class="row q-gutter-x-sm">
-      <q-img :src="getImgUrl(item.image)" style="max-width: 140px;" class="q-responsive" alt="{{item.name}}"/>
+      <q-img
+        class="q-responsive cursor-pointer q-hoverable"
+        v-ripple
+        :src="getImgUrl(item.image)"
+        style="max-width: 140px;"
+        alt="{{item.name}}"
+        @click="updateItemImage"
+      >
+        <q-btn
+          class="absolute-bottom-right"
+          flat
+          text-color="white"
+          icon="photo_camera"
+        />
+      </q-img>
       <div class="column" style="height: 170px">
         <div class="col-10">
           <div class="text-h6 wrap ellipsis-3-lines">{{item.name}}</div>
@@ -70,8 +84,12 @@ import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import InfoTable from '../../../components/Items/Info/InfoTable.vue';
+import ImageDialog from '../../../components/Items/ImageDialog.vue';
+import {useQuasar} from 'quasar';
+
 
 const router = useRouter();
+const $q = useQuasar();
 
 const props = defineProps<{
   id: string;
@@ -82,6 +100,17 @@ const tab = ref('jobs');
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
+}
+
+function updateItemImage() {
+  $q.dialog({
+    component: ImageDialog,
+    componentProps: {
+      itemID: item.value?.id,
+    },
+  }).onOk((payload) => {
+    item.value = payload;
+  });
 }
 </script>
 
