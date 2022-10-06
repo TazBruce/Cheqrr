@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { initializeFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -17,4 +18,5 @@ export const auth = getAuth(firebaseApp);
 export const db = initializeFirestore(firebaseApp, {
   experimentalForceLongPolling: true,
 });
+export const storage = getStorage(firebaseApp);
 

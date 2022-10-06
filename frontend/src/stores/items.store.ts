@@ -1,6 +1,7 @@
 import { Item } from 'src/types/Item';
 import { defineStore } from 'pinia';
-import { db } from 'boot/firebase';
+import { db, storage } from 'boot/firebase';
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { DocumentData, collection, getDocs, CollectionReference, doc, setDoc } from 'firebase/firestore';
 import { useAuthStore } from 'stores/auth.store';
 
@@ -19,6 +20,9 @@ export const useItemsStore = defineStore({
     items: [] as Item[]
   }),
   actions: {
+    /**
+     * Fetches all items from Firebase
+     */
     async fetchItems() {
       if (useAuthStore().organisation === null) {
         return;
@@ -33,6 +37,7 @@ export const useItemsStore = defineStore({
 
     /**
      * Adds an item to the store
+     * @param item The item to add
      */
     addItem(item: Item) {
       this.items.push(item);
@@ -40,6 +45,7 @@ export const useItemsStore = defineStore({
 
     /**
      * Get an item from the store
+     * @param id The id of the item to get
      */
     getItem(id: string): Item | undefined {
       return this.items.find((item) => item.id === id);
@@ -61,6 +67,9 @@ export const useItemsStore = defineStore({
 
     /**
      * Updates an information property of a given item
+     * @param itemID The ID of the item
+     * @param informationKey The key of the information property
+     * @param informationValue The value of the information property
      */
     async updateInformation(itemID: string, informationKey: string, informationValue: string) {
       const item = this.getItem(itemID);
@@ -69,6 +78,24 @@ export const useItemsStore = defineStore({
       }
       item.information[informationKey] = informationValue;
       await updateItem(item);
+    },
+
+    /**
+     * Uploads an image to Firebase Storage and updates the image property of the given item
+     * @param itemID The ID of the item
+     * @param image The image to upload
+     */
+    async uploadImage(itemID: string, image: File) {
+      const item = this.getItem(itemID);
+      if (item === undefined) {
+        return;
+      }
+      const metadata = {
+        contentType: image.type,
+        name: itemID
+      }
+      const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/items/`);
+      await uploadBytes(storageRef, image, metadata);
     }
   },
   persist: true

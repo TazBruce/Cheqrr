@@ -18,7 +18,10 @@ export type Item = {
  * Get the image url
  * @param image The image
  */
-export function getImgUrl(image: string): string {
+export function getImgUrl(image: string | undefined): string {
+  if (image === undefined) {
+    return '';
+  }
   return image !== '' ? image : 'https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER';
 }
 
