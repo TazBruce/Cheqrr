@@ -52,7 +52,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view style="padding-left: 10px; padding-top: 10px; padding-right: 10px"/>
+      <router-view style="padding-left: 10px; padding-top: 10px; padding-right: 20px"/>
     </q-page-container>
 
     <q-footer v-show="$q.platform.is.mobile" bordered class="bg-white text-primary">

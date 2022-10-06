@@ -14,7 +14,7 @@
       <q-img
         class="q-responsive cursor-pointer q-hoverable"
         v-ripple
-        :src="getImgUrl(item.image)"
+        :src="itemImage"
         style="max-width: 140px;"
         alt="{{item.name}}"
         @click="updateItemImage"
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import {Item, getImgUrl, getItemStatusColor} from 'src/types/Item';
+import {Item, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
@@ -90,13 +90,21 @@ import {useQuasar} from 'quasar';
 
 const router = useRouter();
 const $q = useQuasar();
+const itemsStore = useItemsStore();
 
 const props = defineProps<{
   id: string;
 }>()
 
-const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
+const item = ref<Item | undefined>(itemsStore.getItem(props.id));
 const tab = ref('jobs');
+const itemImage = ref('');
+
+itemsStore.getImageUrl(item.value?.id).then((url) => {
+  itemImage.value = url;
+}).catch(() => {
+  itemImage.value = 'https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER';
+});
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
@@ -109,7 +117,7 @@ function updateItemImage() {
       itemID: item.value?.id,
     },
   }).onOk((payload) => {
-    item.value = payload;
+    itemImage.value = payload.image;
   });
 }
 </script>

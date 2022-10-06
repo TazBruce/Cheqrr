@@ -1,7 +1,7 @@
 import { Item } from 'src/types/Item';
 import { defineStore } from 'pinia';
 import { db, storage } from 'boot/firebase';
-import { ref, uploadString } from 'firebase/storage';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { DocumentData, collection, getDocs, CollectionReference, doc, setDoc } from 'firebase/firestore';
 import { useAuthStore } from 'stores/auth.store';
 
@@ -91,11 +91,20 @@ export const useItemsStore = defineStore({
         return;
       }
       const metadata = {
-        contentType: 'image/jpeg',
+        cacheControl: 'public, max-age=31536000',
+        contentType: 'image/png',
         name: itemID
       }
       const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/items/${itemID}`);
       await uploadString(storageRef, image, 'base64', metadata);
+    },
+
+    /**
+     * Gets the image url of an item
+     */
+    async getImageUrl(itemID: string | undefined): Promise<string> {
+      const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/items/${itemID}`);
+      return getDownloadURL(storageRef, );
     }
   },
   persist: true

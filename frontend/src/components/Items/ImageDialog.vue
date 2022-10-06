@@ -6,8 +6,8 @@
   >
     <q-card>
       <q-card-section>
+        <q-img :src="imageSrc" alt="camera"/>
         <q-btn color="primary" label="Get Picture" @click="captureImage" />
-        <img :src="imageSrc" alt="camera">
       </q-card-section>
       <q-card-actions align="right">
         <q-btn
@@ -38,7 +38,7 @@ import { defineProps, defineEmits } from 'vue'
 import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 import { useItemsStore } from 'stores/items.store';
-import { Camera, CameraResultType } from '@capacitor/camera';
+import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 
 const props = defineProps<{
   itemID: string;
@@ -53,9 +53,10 @@ const itemsStore = useItemsStore();
 
 const imageSrc = ref('');
 const loading = ref(false);
+let image: Photo;
 
 async function captureImage() {
-  const image = await Camera.getPhoto({
+  image = await Camera.getPhoto({
     quality: 90,
     allowEditing: true,
     resultType: CameraResultType.Base64
@@ -65,21 +66,20 @@ async function captureImage() {
   // CameraResultType.Uri - Get the result from image.webPath
   // CameraResultType.Base64 - Get the result from image.base64String
   // CameraResultType.DataUrl - Get the result from image.dataUrl
-  if (image.webPath) {
-    imageSrc.value = image.webPath;
+  if (image.base64String) {
+    imageSrc.value = 'data:image/png;base64,'+ image.base64String;
   }
-  loading.value = true;
-  await itemsStore.uploadImage(props.itemID, image.base64String);
-  loading.value = false;
-  onDialogHide();
 }
 
 function close() {
   onDialogCancel()
 }
 
-function save() {
-  onDialogOK()
+async function save() {
+  loading.value = true;
+  await itemsStore.uploadImage(props.itemID, image.base64String);
+  loading.value = false;
+  onDialogOK({ image: imageSrc.value});
 }
 </script>
 
