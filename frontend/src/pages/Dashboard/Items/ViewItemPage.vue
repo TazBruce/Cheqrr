@@ -55,39 +55,7 @@
 
             <q-tab-panel name="info">
               <div class="text-h6">Information</div>
-              <q-markup-table
-                class="full-height"
-              >
-                <thead>
-                  <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <tr v-for="key in Object.keys(item.information)" v-bind:key="key">
-                  <td key="key" class="text-center">{{key}}</td>
-                  <td key="value" class="text-center">{{item.information[key]}}</td>
-                  <td key="actions" class="text-center">
-                    <q-btn
-                      class="q-mr-sm"
-                      color="primary"
-                      text-color="white"
-                      icon="edit"
-                      @click="editItemInformation(key)"
-                    />
-                    <q-btn
-                      class="q-ml-sm"
-                      color="negative"
-                      text-color="white"
-                      icon="delete"
-                      @click="deleteItemInformation(key)"
-                    />
-                  </td>
-                </tr>
-                </tbody>
-              </q-markup-table>
+              <InfoTable :id="item.id"/>
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -102,7 +70,7 @@ import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import {useQuasar} from 'quasar'
-import InfoDialog from 'components/Items/Info/InfoDialog.vue';
+import InfoTable from '../../../components/Items/Info/InfoTable.vue';
 
 const router = useRouter();
 const $q = useQuasar();
@@ -113,41 +81,9 @@ const props = defineProps<{
 
 const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
 const tab = ref('jobs');
-const selectedPropertyKey = ref('');
-const selectedPropertyValue = ref('');
 
 if (item.value === undefined) {
   useRouter().push({ name: '404'});
-}
-
-/**
- * Delete item information
- * @param key property key
- */
-function deleteItemInformation(key: string) {
-  if (item.value !== undefined) {
-    useItemsStore().deleteInformation(item.value.id, key);
-  }
-}
-
-/**
- * Edit item information
- * @param key property key
- */
-function editItemInformation(key: string) {
-  selectedPropertyKey.value = key;
-  selectedPropertyValue.value = item.value?.information[key].toString() ?? '';
-  $q.dialog({
-    component: InfoDialog,
-    componentProps: {
-      propertyKey: selectedPropertyKey.value,
-      propertyValue: selectedPropertyValue.value,
-    },
-  }).onOk((payload) => {
-    if (item.value !== undefined) {
-      useItemsStore().updateInformation(item.value.id, payload.property, payload.value);
-    }
-  });
 }
 </script>
 
