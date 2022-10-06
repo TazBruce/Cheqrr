@@ -19,7 +19,7 @@
           color="primary"
           text-color="white"
           icon="edit"
-          @click="editItemInformation(key)"
+          @click="updateItemInformation(key)"
         />
         <q-btn
           class="q-ml-sm"
@@ -27,6 +27,33 @@
           text-color="white"
           icon="delete"
           @click="deleteItemInformation(key)"
+        />
+      </td>
+    </tr>
+    <tr>
+      <td key="key" class="text-center">
+        <q-input
+          v-model="newPropertyKey"
+          label="Property"
+          filled
+          dense
+        />
+      </td>
+      <td key="value" class="text-center">
+        <q-input
+          v-model="newPropertyValue"
+          label="Value"
+          filled
+          dense
+        />
+      </td>
+      <td key="actions" class="text-center">
+        <q-btn
+          class="q-mr-sm"
+          color="primary"
+          text-color="white"
+          icon="add"
+          @click="addItemInformation"
         />
       </td>
     </tr>
@@ -48,6 +75,9 @@ const $q = useQuasar();
 const item = ref<Item | undefined>(useItemsStore().getItem(props.id));
 const selectedPropertyKey = ref('');
 const selectedPropertyValue = ref('');
+const itemStore = useItemsStore();
+const newPropertyKey = ref('');
+const newPropertyValue = ref('');
 
 /**
  * Delete item information
@@ -55,7 +85,7 @@ const selectedPropertyValue = ref('');
  */
 function deleteItemInformation(key: string) {
   if (item.value !== undefined) {
-    useItemsStore().deleteInformation(item.value.id, key);
+    itemStore.deleteInformation(item.value.id, key);
   }
 }
 
@@ -63,9 +93,10 @@ function deleteItemInformation(key: string) {
  * Edit item information
  * @param key property key
  */
-function editItemInformation(key: string) {
+function updateItemInformation(key: string) {
   selectedPropertyKey.value = key;
-  selectedPropertyValue.value = item.value?.information[key].toString() ?? '';
+  const value = item.value?.information[key];
+  selectedPropertyValue.value = value !== undefined ? value.toString() : '';
   $q.dialog({
     component: InfoDialog,
     componentProps: {
@@ -74,9 +105,20 @@ function editItemInformation(key: string) {
     },
   }).onOk((payload) => {
     if (item.value !== undefined) {
-      useItemsStore().updateInformation(item.value.id, payload.property, payload.value);
+      itemStore.updateInformation(item.value.id, payload.property, payload.value);
     }
   });
+}
+
+/**
+ * Add item information
+ */
+function addItemInformation() {
+  if (item.value !== undefined && newPropertyKey.value !== '' && newPropertyValue.value !== '') {
+    itemStore.updateInformation(item.value.id, newPropertyKey.value, newPropertyValue.value);
+    newPropertyKey.value = '';
+    newPropertyValue.value = '';
+  }
 }
 </script>
 
