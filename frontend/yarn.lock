@@ -917,6 +917,13 @@
   resolved "https://registry.yarnpkg.com/@capacitor/camera/-/camera-4.1.2.tgz#a1c4273948bf5f60e58c5daf3f22db6279a96cde"
   integrity sha512-YJMw8sflNj3aa9jSqOgSKOhjKNjc6fb1wxdVMW7Ek6SWsykbcAMWRkecOsSqPNPyDbNRBiwB8P5ZuUC8ZwRm0A==
 
+"@capacitor/core@^3.0.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-3.8.0.tgz#45d2c4e7db07051a8a214b9b3c851f23dcc06abe"
+  integrity sha512-Z7iHM+1CBbuIK+74bS4ZjpPUOdcKb7Gf7j8xK9WegcrUeHZQl4O6hAAn6nT60kDoeAyutsr3PP25542Ur0wLBg==
+  dependencies:
+    tslib "^2.1.0"
+
 "@esbuild/linux-loong64@0.14.54":
   version "0.14.54"
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
