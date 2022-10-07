@@ -8,6 +8,7 @@ import {useJobsStore} from "stores/jobs.store";
 
 type State = {
   role: Role | null;
+  username: string | null;
   user: User | null;
   isLoggedIn: boolean;
 }
@@ -19,6 +20,7 @@ export const useAuthStore = defineStore({
   id: 'auth',
   state: (): State => ({
     role: null,
+    username: null,
     user: null,
     isLoggedIn: false
   }),
@@ -33,16 +35,22 @@ export const useAuthStore = defineStore({
   actions: {
     /**
      * Registers the user.
+     * @param username The username
      * @param email The email of the user
      * @param password The password of the user
      */
-    async register(email: string, password: string) {
+    async register(username: string, email: string, password: string) {
       await createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
-          this.user = userCredential.user;
-          this.isLoggedIn = true;
-          this.router.push('/setup');
-          alert('Registered!');
+          await setDoc(doc(db, 'users', userCredential.user.uid), {
+            username,
+          }).then(() => {
+            this.username = username;
+            this.user = userCredential.user;
+            this.isLoggedIn = true;
+            this.router.push('/setup');
+            alert('Registered!');
+          });
         })
         .catch((error) => {
           alert(error.message);
@@ -57,19 +65,24 @@ export const useAuthStore = defineStore({
     async signIn(email: string, password: string) {
       await signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
-          await getRole(userCredential.user.uid).then((userRole) => {
+          await getRole(userCredential.user.uid).then(async (userRole) => {
             if (userRole != undefined) {
               this.role = {
                 orgID: userRole.orgID,
                 role: userRole.role
               };
-              useItemsStore().fetchItems();
-              useJobsStore().fetchJobs();
+              await getDoc(doc(db, 'users', userCredential.user.uid)).then(async (userDoc) => {
+                if (userDoc.exists()) {
+                  this.username = userDoc.data().username;
+                  this.user = userCredential.user;
+                  this.isLoggedIn = true;
+                  await useItemsStore().fetchItems();
+                  await useJobsStore().fetchJobs();
+                  this.router.push('/dashboard');
+                  alert('Signed in!');
+                }
+              });
             }
-            this.user = userCredential.user;
-            this.isLoggedIn = true;
-            this.router.push('/dashboard');
-            alert('Signed in!');
           });
         })
         .catch((error) => {
