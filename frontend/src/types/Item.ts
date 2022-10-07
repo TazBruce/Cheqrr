@@ -1,3 +1,5 @@
+import {Comment} from 'src/types/Job';
+
 export enum ItemStatus {
   available = 'Available',
   maintenance = 'Maintenance',
@@ -11,6 +13,7 @@ export type Item = {
   description: string;
   status: ItemStatus;
   information: Record<string, string | boolean | number>;
+  comments: Comment[];
 }
 
 /**
