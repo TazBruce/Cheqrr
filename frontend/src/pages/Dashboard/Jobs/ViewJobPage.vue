@@ -126,6 +126,7 @@ import {useJobsStore} from 'stores/jobs.store';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import {useQuasar} from 'quasar';
+import ImageDialog from 'components/ImageDialog.vue';
 
 const jobsStore = useJobsStore();
 const itemsStore = useItemsStore();
@@ -162,9 +163,14 @@ function editJob() {
  */
 function addImage() {
   $q.dialog({
-    component: () => import('components/ImageDialog.vue'),
+    component: ImageDialog,
   }).onOk((image) => {
-    //jobsStore.addJobImage(job.value?.id ?? '', image);
+    if (images.value.length === 1) {
+      images.value[0] = image.imageSrc;
+    } else {
+      images.value.push(image.imageSrc);
+    }
+    jobsStore.addJobImage(job.value?.id ?? '', image.imageBase64, (images.value.length + 1).toString());
   });
 }
 

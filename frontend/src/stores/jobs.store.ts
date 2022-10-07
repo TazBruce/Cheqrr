@@ -2,7 +2,7 @@ import {Job, JobStatus} from 'src/types/Job';
 import {defineStore} from 'pinia';
 import {db, storage} from 'boot/firebase';
 import {collection, CollectionReference, doc, DocumentData, getDocs, setDoc, deleteDoc} from 'firebase/firestore';
-import {ref, listAll, getDownloadURL} from 'firebase/storage';
+import {ref, listAll, getDownloadURL, uploadString} from 'firebase/storage';
 import {useAuthStore} from 'stores/auth.store';
 
 type State = {
@@ -105,19 +105,37 @@ export const useJobsStore = defineStore({
         return ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
       }
       const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/jobs/${jobID}/`);
-      const images: string[] = [];
-      listAll(storageRef).then((res) => {
-        res.items.forEach((itemRef) => {
-          getDownloadURL(itemRef).then((url) => {
-            images.push(url);
-          });
-        });
+      let images = [];
+      try {
+        const list = await listAll(storageRef);
+        for (const item of list.items) {
+          images.push(await getDownloadURL(item));
+        }
+      } catch (e) {
+        console.log(e);
       }
-      );
       if (images.length === 0) {
-        return ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
+        images = ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
       }
       return images;
+    },
+
+    /**
+     * Adds an image to Firebase Storage that is associated with a job
+     * @param jobID The ID of the job to add the image to
+     * @param image The image to add
+     * @param name The name of the image
+     */
+    async addJobImage(jobID: string, image: string, name: string) {
+      if (useAuthStore().organisation === null || jobID === '' || image === '') {
+        return;
+      }
+      const metadata = {
+        cacheControl: 'public, max-age=31536000',
+        contentType: 'image/png',
+      }
+      const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/jobs/${jobID}/${name}`);
+      await uploadString(storageRef, image, 'base64', metadata);
     }
   },
   persist: true
