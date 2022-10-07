@@ -5,17 +5,6 @@ admin.initializeApp();
 const firestore = admin.firestore();
 
 /**
- * A function that is triggered when a user is created.
- */
-export const authOnCreate =
-    functions.auth.user().onCreate(async (user) => {
-        console.log(`Creating document for user ${user.uid}`);
-        await firestore.collection('users').doc(user.uid).set({
-            createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
-    });
-
-/**
  * A function that is triggered when a user is deleted.
  */
 export const authOnDelete =
