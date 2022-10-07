@@ -81,7 +81,7 @@
             </q-tab-panel>
             <q-tab-panel name="comments">
               <div class="text-h6">Comments</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              <CommentTable :object="item" :is-job="false" />
             </q-tab-panel>
             <q-tab-panel name="info">
               <div class="text-h6">Information</div>
@@ -104,6 +104,7 @@ import InfoTable from '../../../components/Items/Info/InfoTable.vue';
 import ImageDialog from 'components/ImageDialog.vue';
 import {useQuasar} from 'quasar';
 import JobComponent from 'components/Jobs/JobComponent.vue';
+import CommentTable from "components/CommentTable.vue";
 
 
 const router = useRouter();

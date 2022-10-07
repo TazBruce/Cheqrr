@@ -109,7 +109,7 @@
           <q-separator />
           <q-tab-panels v-model="tab" animated class="absolute fit">
             <q-tab-panel name="comments">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              <CommentTable :object="job" :is-job="true" />
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -127,6 +127,7 @@ import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import {useQuasar} from 'quasar';
 import ImageDialog from 'components/ImageDialog.vue';
+import CommentTable from 'components/CommentTable.vue';
 
 const jobsStore = useJobsStore();
 const itemsStore = useItemsStore();

@@ -79,6 +79,7 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
+import {Comment} from "src/types/Job";
 import {useRouter} from 'vue-router';
 import {Camera, CameraResultType} from '@capacitor/camera';
 import {Item, ItemStatus} from 'src/types/Item';
@@ -100,6 +101,7 @@ const imageSrc = ref('');
 const imageBase64 = ref('');
 const loading = ref(false);
 const status = ref(ItemStatus.available);
+const comments = ref<Comment[]>([]);
 
 const statusOptions = [
   ItemStatus.available,
@@ -116,6 +118,7 @@ if (props.id) {
     name.value = item.name;
     description.value = item.description;
     status.value = item.status;
+    comments.value = item.comments;
     itemsStore.getImageUrl(item.id).then((url) => {
       imageSrc.value = url;
     }).catch(() => {
@@ -136,7 +139,8 @@ async function onSubmit() {
     name: name.value,
     description: description.value,
     information: item?.information ? item.information : {},
-    status: status.value
+    status: status.value,
+    comments: comments.value,
   };
   await itemsStore.updateItem(newItem, imageBase64.value);
   loading.value = false;
