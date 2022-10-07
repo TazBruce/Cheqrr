@@ -12,6 +12,14 @@
       <q-breadcrumbs-el :label="title" class="text-grey-7" />
     </q-breadcrumbs>
     <h1 class="text-h5">{{title}}</h1>
+    <q-btn
+      class="absolute-top-right"
+      style="margin-right: 20px; margin-top: 60px;"
+      color="negative"
+      icon="delete"
+      @click="deleteItem"
+      :hidden="!editMode"
+    />
     <q-form @submit="onSubmit" class="column q-gutter-y-sm">
       <div class="col self-center">
         <q-img
@@ -84,6 +92,7 @@ const props = defineProps<{
 }>()
 
 let item: Item | undefined;
+const editMode = ref(false);
 const title = ref('Create Item');
 const name = ref('');
 const description = ref('');
@@ -102,6 +111,7 @@ const statusOptions = [
 if (props.id) {
   item = useItemsStore().getItem(props.id);
   if (item) {
+    editMode.value = true;
     title.value = 'Edit Item';
     name.value = item.name;
     description.value = item.description;
@@ -143,6 +153,15 @@ async function updateItemImage() {
       imageSrc.value = 'data:image/png;base64,'+ image.base64String;
       imageBase64.value = image.base64String;
     }
+  }
+}
+
+/**
+ * Deletes the item.
+ */
+async function deleteItem() {
+  if (!loading.value) {
+    await itemsStore.deleteItem(item?.id || '');
   }
 }
 </script>

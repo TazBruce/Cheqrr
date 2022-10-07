@@ -2,7 +2,7 @@ import {Item} from 'src/types/Item';
 import {defineStore} from 'pinia';
 import {db, storage} from 'boot/firebase';
 import {getDownloadURL, ref, uploadString} from 'firebase/storage';
-import {collection, CollectionReference, doc, DocumentData, getDocs, setDoc} from 'firebase/firestore';
+import {collection, CollectionReference, doc, DocumentData, getDocs, setDoc, deleteDoc} from 'firebase/firestore';
 import {useAuthStore} from 'stores/auth.store';
 
 type State = {
@@ -73,6 +73,26 @@ export const useItemsStore = defineStore({
           this.items[index] = item;
         }
         this.router.replace('/dashboard/items/' + item.id);
+      });
+    },
+
+    /**
+     * A helper function to delete an item from Firebase
+     * @param itemID The id of the item to delete
+     */
+    async deleteItem(itemID: string) {
+      if (useAuthStore().organisation === null) {
+        return;
+      }
+      if (this.getItem(itemID) === undefined) {
+        return;
+      }
+      const itemsCollection = createCollection<Item>('organisations/' + useAuthStore().organisation + '/items');
+      const itemDoc = doc(itemsCollection, itemID);
+      await deleteDoc(itemDoc).then(() => {
+        const index = this.items.findIndex((i) => i.id === itemID);
+        this.items.splice(index, 1);
+        this.router.go(-2);
       });
     },
 
