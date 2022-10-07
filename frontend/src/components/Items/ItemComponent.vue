@@ -1,5 +1,9 @@
 <template>
-  <q-card @click="navigateToItem" v-ripple class="cursor-pointer q-hoverable text-left" style="width: 150px; height: auto;">
+  <q-card
+    @click="navigateToItem"
+    v-ripple
+    class="cursor-pointer q-hoverable text-left"
+    style="width: 150px; height: auto;">
     <q-card-section class="no-padding bg-grey-3">
       <q-img :src="itemImage" width="150px" height="150px" alt="{{item.name}}"/>
     </q-card-section>
