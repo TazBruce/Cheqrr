@@ -1,4 +1,5 @@
 import {Item} from 'src/types/Item';
+import {Comment} from 'src/types/Job';
 import {defineStore} from 'pinia';
 import {db, storage} from 'boot/firebase';
 import {getDownloadURL, ref, uploadString} from 'firebase/storage';
@@ -123,6 +124,46 @@ export const useItemsStore = defineStore({
       }
       item.information[informationKey] = informationValue;
       await this.updateItem(item);
+    },
+
+    /**
+     * Updates a comment of a given item
+     * @param itemID The ID of the item
+     * @param commentID The ID of the comment
+     * @param comment The comment
+     */
+    async updateComment(itemID: string, commentID: number, comment: string) {
+      const item = this.getItem(itemID);
+      const authStore = useAuthStore();
+      if (authStore.organisation === null || authStore.username === null ||item === undefined || comment === '') {
+        return;
+      } else {
+        const newComment: Comment = {
+          comment: comment,
+          author: authStore.username
+        }
+        if (commentID === -1) {
+          item.comments.push(newComment);
+        } else {
+          item.comments[commentID] = newComment;
+        }
+        await this.updateItem(item);
+      }
+    },
+
+    /**
+     * Deletes a comment of a given item
+     * @param itemID The ID of the item
+     * @param commentID The ID of the comment
+     */
+    async deleteComment(itemID: string, commentID: number) {
+      const item = this.getItem(itemID);
+      if (item === undefined || item.comments[commentID] === undefined) {
+        return;
+      } else {
+        item.comments.splice(commentID, 1);
+        await this.updateItem(item);
+      }
     },
 
     /**

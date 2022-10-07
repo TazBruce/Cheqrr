@@ -9,10 +9,8 @@ export type Job = {
 }
 
 export type Comment = {
-  id: string;
   comment: string;
-  timestamp: Date;
-  user: string;
+  author: string;
 }
 
 export enum JobStatus {

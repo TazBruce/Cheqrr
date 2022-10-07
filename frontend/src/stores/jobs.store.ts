@@ -1,4 +1,4 @@
-import {Job, JobStatus} from 'src/types/Job';
+import {Comment, Job, JobStatus} from 'src/types/Job';
 import {defineStore} from 'pinia';
 import {db, storage} from 'boot/firebase';
 import {collection, CollectionReference, doc, DocumentData, getDocs, setDoc, deleteDoc} from 'firebase/firestore';
@@ -95,22 +95,6 @@ export const useJobsStore = defineStore({
     },
 
     /**
-     * A helper function to update a job's status in Firebase
-     * @param job The job to update
-     * @param status The new status of the job
-     */
-    async updateJobStatus(job: Job, status: JobStatus) {
-      if (useAuthStore().organisation === null) {
-        return;
-      }
-      const jobsCollection = createCollection<Job>('organisations/' + useAuthStore().organisation + '/jobs');
-      await setDoc(doc(jobsCollection, job.id), {
-        status: status
-      }, {merge: true});
-      job.status = status;
-    },
-
-    /**
      * Pulls all images from Firebase Storage that are associated with a job
      * @param jobID The ID of the job to pull images for
      * @returns An array of image URLs
@@ -152,6 +136,8 @@ export const useJobsStore = defineStore({
 
     /**
      * Deletes an image from Firebase Storage that is associated with a job
+     * @param jobID The ID of the job to delete the image from
+     * @param url The URL of the image to delete
      */
     async deleteJobImage(jobID: string, url: string) {
       if (useAuthStore().organisation === null || jobID === '' || url === '') {
@@ -159,6 +145,44 @@ export const useJobsStore = defineStore({
       }
       const storageRef = ref(storage, url);
       await deleteObject(storageRef);
+    },
+
+    /**
+     * Adds a comment to a job
+     * @param jobID The ID of the job to add the comment to
+     * @param commentID The ID of the comment to update
+     * @param comment The comment to add
+     */
+    async updateComment(jobID: string, commentID: number, comment: string) {
+      const job = this.getJob(jobID);
+      const authStore = useAuthStore();
+      if (authStore.organisation === null || authStore.username === null || job === undefined || comment === '') {
+        return;
+      } else {
+        const newComment: Comment = {
+          comment: comment,
+          author: authStore.username,
+        }
+        if (commentID === -1) {
+          job.comments.push(newComment);
+        } else {
+          job.comments[commentID] = newComment;
+        }
+        await this.updateJob(job);
+      }
+    },
+
+    /**
+     * Deletes a comment from a job
+     */
+    async deleteComment(jobID: string, commentID: number) {
+      const job = this.getJob(jobID);
+      if (job === undefined || job.comments[commentID] === undefined) {
+        return;
+      } else {
+        job.comments.splice(commentID, 1);
+        await this.updateJob(job);
+      }
     }
   },
   persist: true
