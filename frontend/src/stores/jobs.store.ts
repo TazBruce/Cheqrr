@@ -38,8 +38,22 @@ export const useJobsStore = defineStore({
      * Get a job from the store
      * @param id The id of the job
      */
-    getJob(id: string): Job | undefined {
+    getJob(id: string | undefined): Job | undefined {
+      if (id === undefined) {
+        return undefined;
+      }
       return this.jobs.find((job) => job.id === id);
+    },
+
+    /**
+     * Get all jobs for an item
+     * @param itemId The id of the item
+     */
+    getJobsForItem(itemId: string | undefined): Job[] {
+      if (itemId === undefined) {
+        return [];
+      }
+      return this.jobs.filter((job) => job.item === itemId);
     },
 
     /**

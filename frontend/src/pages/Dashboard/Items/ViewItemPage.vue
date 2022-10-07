@@ -35,7 +35,7 @@
             style="margin-right: 20px; margin-top: 60px;"
             color="primary"
             icon="edit"
-            @click="editItem"
+            @click="router.push({ name: 'editItem', params: { id: item.id }});"
           />
         </div>
         <div class="col-2">
@@ -66,14 +66,23 @@
           <q-tab-panels v-model="tab" animated class="absolute fit">
             <q-tab-panel name="jobs">
               <div class="text-h6">Jobs</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              <q-btn
+                color="primary"
+                icon="add"
+                @click="router.push({ name: 'createJob', params: { itemID: item.id }});"
+              />
+              <q-list class="q-gutter-md row">
+                <JobComponent
+                  v-for="job in jobs"
+                  :key="job.id"
+                  :job="job"
+                />
+              </q-list>
             </q-tab-panel>
-
             <q-tab-panel name="comments">
               <div class="text-h6">Comments</div>
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </q-tab-panel>
-
             <q-tab-panel name="info">
               <div class="text-h6">Information</div>
               <InfoTable :id="item.id"/>
@@ -89,10 +98,12 @@
 import {Item, getItemStatusColor} from 'src/types/Item';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
+import {useJobsStore} from 'stores/jobs.store';
 import {useRouter} from 'vue-router';
 import InfoTable from '../../../components/Items/Info/InfoTable.vue';
 import ImageDialog from 'components/ImageDialog.vue';
 import {useQuasar} from 'quasar';
+import JobComponent from 'components/Jobs/JobComponent.vue';
 
 
 const router = useRouter();
@@ -104,6 +115,7 @@ const props = defineProps<{
 }>()
 
 const item = ref<Item | undefined>(itemsStore.getItem(props.id));
+const jobs = useJobsStore().getJobsForItem(props.id);
 const tab = ref('jobs');
 const itemImage = ref('');
 
@@ -125,10 +137,6 @@ function updateItemImage() {
     itemImage.value = payload.imageSrc;
     itemsStore.uploadImage(props.id, payload.imageBase64);
   });
-}
-
-function editItem() {
-  router.push({ name: 'editItem', params: { id: item.value?.id }});
 }
 </script>
 

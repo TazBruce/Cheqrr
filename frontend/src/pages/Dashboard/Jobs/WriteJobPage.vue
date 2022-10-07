@@ -7,7 +7,9 @@
       :label-class="`text-grey-8`"
       :active-class="`text-primary`"
     >
-      <q-breadcrumbs-el  label="Jobs" class="cursor-pointer q-hoverable" @click="router.push('/dashboard/jobs')" />
+      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.push('/dashboard/items')" />
+      <q-breadcrumbs-el :label="item.name" class="cursor-pointer q-hoverable"
+                        @click="router.push({name: 'viewItem', params: {id: item.id}})" />
       <q-breadcrumbs-el :label="job.title" class="cursor-pointer q-hoverable" @click="router.go(-1)" />
       <q-breadcrumbs-el :label="title" class="text-grey-7" />
     </q-breadcrumbs>
@@ -58,11 +60,14 @@
 
 <script setup lang="ts">
 import {useJobsStore} from 'stores/jobs.store';
+import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import {ref} from 'vue';
 import {Job, JobStatus, JobType} from 'src/types/Job';
+import {Item} from 'src/types/Item';
 
 const jobsStore = useJobsStore();
+const itemsStore = useItemsStore();
 const router = useRouter();
 
 const props = defineProps<{
@@ -71,6 +76,7 @@ const props = defineProps<{
 }>();
 
 const job = ref<Job | undefined>(undefined);
+const item = ref<Item | undefined>(itemsStore.getItem(props.itemID));
 const title = ref<string>('Create Job');
 const editMode = ref<boolean>(false);
 const loading = ref<boolean>(false);
