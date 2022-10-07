@@ -7,18 +7,18 @@
       :label-class="`text-grey-8`"
       :active-class="`text-primary`"
     >
-      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.go(-2)" />
+      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.push('/dashboard/items')" />
       <q-breadcrumbs-el :label="name" class="cursor-pointer q-hoverable" @click="router.go(-1)" />
       <q-breadcrumbs-el :label="title" class="text-grey-7" />
     </q-breadcrumbs>
     <h1 class="text-h5">{{title}}</h1>
     <q-btn
       class="absolute-top-right"
+      :class="{hidden: !editMode}"
       style="margin-right: 20px; margin-top: 60px;"
       color="negative"
       icon="delete"
       @click="deleteItem"
-      :hidden="!editMode"
     />
     <q-form @submit="onSubmit" class="column q-gutter-y-sm">
       <div class="col self-center">
@@ -126,6 +126,9 @@ if (props.id) {
   }
 }
 
+/**
+ * Submit the form
+ */
 async function onSubmit() {
   loading.value = true;
   const newItem: Item = {
