@@ -7,7 +7,7 @@
       :label-class="`text-grey-8`"
       :active-class="`text-primary`"
     >
-      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.back()" />
+      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.push({name: 'items'})" />
       <q-breadcrumbs-el :label="item.name" class="text-grey-7" />
     </q-breadcrumbs>
     <div class="row q-gutter-x-sm">

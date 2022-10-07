@@ -1,7 +1,31 @@
 <template>
   <q-page class="row">
-    <div class="col-12 q-gutter-md">
+    <div class="col-12">
       <div class="row">
+        <q-breadcrumbs
+          class="q-mb-md"
+          :separator="`>`"
+          :separator-class="`text-grey-8`"
+          :label-class="`text-grey-8`"
+          :active-class="`text-primary`"
+        >
+          <q-breadcrumbs-el
+            label="Items"
+            class="cursor-pointer q-hoverable"
+            @click="router.push({name: 'items'})"
+          />
+          <q-breadcrumbs-el
+            :label="item.name"
+            class="cursor-pointer q-hoverable"
+            @click="router.push({name: 'viewItem', params: {id: item.id}})"
+          />
+          <q-breadcrumbs-el
+            :label="job.title"
+            class="text-grey-7"
+          />
+        </q-breadcrumbs>
+      </div>
+      <div class="row" style="padding-bottom: 15px">
         <div class="col-auto">
           <div style="width: 200px;">
             <q-carousel
@@ -67,11 +91,14 @@
 
 <script setup lang="ts">
 import {Job, getJobStatusColor} from 'src/types/Job';
+import {Item} from 'src/types/Item';
 import {ref} from 'vue';
 import {useJobsStore} from 'stores/jobs.store';
+import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 
 const jobsStore = useJobsStore();
+const itemsStore = useItemsStore();
 const router = useRouter();
 
 const props = defineProps<{
@@ -79,6 +106,7 @@ const props = defineProps<{
 }>();
 
 const job = ref<Job | undefined>(jobsStore.getJob(props.id));
+const item = ref<Item | undefined>(itemsStore.getItem(job.value?.item ?? ''));
 const images = ref<string[]>([]);
 const slide = ref<number>(0);
 const tab = ref<string>('comments');

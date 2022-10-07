@@ -26,7 +26,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', redirect: '/dashboard/jobs' },
       { path: 'jobs', component: RouterView,
         children: [
-          { path: '', component: () => import('pages/Dashboard/Jobs/JobsPage.vue') },
+          { name: 'jobs', path: '', component: () => import('pages/Dashboard/Jobs/JobsPage.vue') },
           { name: 'createJob', path: 'create', component: () => import('pages/Dashboard/Jobs/WroteJobPage.vue') },
           { name: 'viewJob', path: ':id', component: () => import('pages/Dashboard/Jobs/ViewJobPage.vue'), props: true },
           { name: 'editJob', path: ':id/edit', component: () => import('pages/Dashboard/Jobs/WriteJobPage.vue'), props: true },
@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
       },
       { path: 'items', component: RouterView,
         children: [
-          { path: '', component: () => import('../pages/Dashboard/Items/ItemsPage.vue') },
+          { name: 'items', path: '', component: () => import('../pages/Dashboard/Items/ItemsPage.vue') },
           { name: 'createItem', path: 'create', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue') },
           { name: 'editItem', path: 'edit/:id', component: () => import('../pages/Dashboard/Items/WriteItemPage.vue'), props: true },
           { name: 'viewItem', path: ':id', component: () => import('../pages/Dashboard/Items/ViewItemPage.vue'), props: true }
