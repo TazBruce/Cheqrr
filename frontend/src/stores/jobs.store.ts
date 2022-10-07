@@ -102,10 +102,10 @@ export const useJobsStore = defineStore({
      */
     async getJobImages(jobID: string) {
       if (useAuthStore().organisation === null || jobID === '') {
-        return ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
+        return [];
       }
       const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/jobs/${jobID}/`);
-      let images = [];
+      const images = [];
       try {
         const list = await listAll(storageRef);
         for (const item of list.items) {
@@ -113,9 +113,6 @@ export const useJobsStore = defineStore({
         }
       } catch (e) {
         console.log(e);
-      }
-      if (images.length === 0) {
-        images = ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
       }
       return images;
     },
@@ -145,7 +142,6 @@ export const useJobsStore = defineStore({
       if (useAuthStore().organisation === null || jobID === '' || url === '') {
         return;
       }
-      console.log(url);
       const storageRef = ref(storage, url);
       await deleteObject(storageRef);
     }

@@ -142,9 +142,15 @@ const item = ref<Item | undefined>(itemsStore.getItem(job.value?.item ?? ''));
 const images = ref<string[]>([]);
 const slide = ref<number>(0);
 const tab = ref<string>('comments');
+let usingPlaceholder = true;
 
 jobsStore.getJobImages(props.id).then((jobImages) => {
-  images.value = jobImages
+  if (jobImages.length > 0) {
+    images.value = jobImages;
+    usingPlaceholder = false;
+  } else {
+    images.value.push('https://via.placeholder.com/150x150/cccccc/969696?text=+')
+  }
 });
 
 if (job.value === undefined) {
@@ -165,12 +171,21 @@ function addImage() {
   $q.dialog({
     component: ImageDialog,
   }).onOk((image) => {
-    if (images.value.length === 1) {
-      images.value[0] = image.imageSrc;
-    } else {
-      images.value.push(image.imageSrc);
+    const guid = () => {
+      let s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
-    jobsStore.addJobImage(job.value?.id ?? '', image.imageBase64, (images.value.length + 1).toString());
+    if (usingPlaceholder) {
+      images.value = [];
+      usingPlaceholder = false;
+    }
+    images.value.push(image.imageSrc);
+    jobsStore.addJobImage(job.value?.id ?? '', image.imageBase64, guid().toString());
+    slide.value = images.value.length - 1;
   });
 }
 
@@ -188,6 +203,9 @@ function deleteImage() {
     images.value.splice(slide.value, 1);
     if (images.value.length === 0) {
       images.value.push('https://via.placeholder.com/150x150/cccccc/969696?text=+');
+      usingPlaceholder = true;
+    } else {
+      slide.value = slide.value - 1;
     }
     jobsStore.deleteJobImage(job.value?.id ?? '', image);
   });
