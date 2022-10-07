@@ -4,6 +4,7 @@ import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, Use
 import {deleteDoc, doc, getDoc, setDoc, addDoc, collection} from 'firebase/firestore';
 import {Role, RoleType} from 'src/types/Role';
 import {useItemsStore} from 'stores/items.store';
+import {useJobsStore} from "stores/jobs.store";
 
 type State = {
   role: Role | null;
@@ -63,6 +64,7 @@ export const useAuthStore = defineStore({
                 role: userRole.role
               };
               useItemsStore().fetchItems();
+              useJobsStore().fetchJobs();
             }
             this.user = userCredential.user;
             this.isLoggedIn = true;
@@ -82,6 +84,7 @@ export const useAuthStore = defineStore({
       signOut(auth)
         .then(() => {
           useItemsStore().$reset();
+          useJobsStore().$reset();
           this.$reset();
           this.router.replace('/');
           alert('Signed out!');
@@ -124,6 +127,7 @@ export const useAuthStore = defineStore({
         role: RoleType.Reporter,
       }
       await useItemsStore().fetchItems();
+      await useJobsStore().fetchJobs();
       alert('Joined organisation!');
       this.router.push('/dashboard');
     },
