@@ -66,13 +66,13 @@ export const useJobsStore = defineStore({
     /**
      * A helper function to delete a job from Firebase
      */
-    async deleteJob(job: Job) {
-      if (useAuthStore().organisation === null) {
+    async deleteJob(jobID?: string) {
+      if (useAuthStore().organisation === null || jobID === undefined) {
         return;
       }
       const jobsCollection = createCollection<Job>('organisations/' + useAuthStore().organisation + '/jobs');
-      await deleteDoc(doc(jobsCollection, job.id));
-      this.jobs = this.jobs.filter((j) => j.id !== job.id);
+      await deleteDoc(doc(jobsCollection, jobID));
+      this.jobs = this.jobs.filter((j) => j.id !== jobID);
     },
 
     /**
