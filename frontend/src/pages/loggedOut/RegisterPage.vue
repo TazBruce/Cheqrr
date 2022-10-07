@@ -12,6 +12,13 @@
       <q-card-section>
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
+            v-model="username"
+            label="Username"
+            filled
+            dense
+            :rules="[val => val.length > 0 || 'Please type something']"
+          />
+          <q-input
             v-model="email"
             label="Email"
             filled
@@ -65,6 +72,7 @@ import { useAuthStore } from '../../stores/auth.store';
 
 let isPwd = ref(true)
 let isLoading = ref(false)
+let username = ref('')
 let email = ref('');
 let password = ref('');
 let passwordConfirmation = ref('');
@@ -75,7 +83,7 @@ async function onSubmit () {
     alert('Password and password confirmation do not match');
   } else {
     isLoading.value = true;
-    await auth.register(email.value, password.value);
+    await auth.register(username.value, email.value, password.value);
     isLoading.value = false;
   }
 }
