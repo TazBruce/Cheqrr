@@ -104,6 +104,7 @@ itemsStore.getImageUrl(item.value?.id).then((url) => {
   itemImage.value = url;
 }).catch(() => {
   itemImage.value = 'https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER';
+  Promise.resolve();
 });
 
 if (item.value === undefined) {

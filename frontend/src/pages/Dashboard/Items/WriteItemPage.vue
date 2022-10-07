@@ -35,6 +35,7 @@
           icon="delete"
           label="Remove Image"
           @click="imageSrc = ''"
+          :disable="loading"
         />
       </div>
       <q-input
@@ -42,6 +43,7 @@
         label="Name"
         filled
         lazy-rules
+        :disable="loading"
         :rules="[val => val.length > 0 || 'Name is required',
                  val => val.length <= 25 || 'Name must be less than 25 characters']"
       />
@@ -50,18 +52,21 @@
         label="Description"
         filled
         lazy-rules
+        :disable="loading"
         :rules="[val => val.length > 0 || 'Description is required',
         val => val.length < 100 || 'Description must be less than 100 characters']"
       />
-      <q-btn type="submit" color="primary" label="Submit" />
+      <q-btn type="submit" color="primary" label="Submit" :loading="loading" />
     </q-form>
   </q-page>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+<script setup lang="ts">
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
 import {Camera, CameraResultType} from '@capacitor/camera';
+import {Item, ItemStatus} from 'src/types/Item';
+import {useItemsStore} from 'src/stores/items.store';
 
 const router = useRouter();
 
@@ -69,25 +74,35 @@ const name = ref('');
 const description = ref('');
 const imageSrc = ref('');
 const imageBase64 = ref('');
+const loading = ref(false);
 
-const onSubmit = () => {
-  console.log('onSubmit');
+async function onSubmit() {
+  loading.value = true;
+  const item: Item = {
+    id: '',
+    name: name.value,
+    description: description.value,
+    status: ItemStatus.available,
+    information: {}
+  };
+  await useItemsStore().updateItem(item, imageBase64.value);
+  loading.value = false;
 };
 
+/**
+ * Opens the camera and allows the user to take a picture.
+ */
 async function updateItemImage() {
-  const image = await Camera.getPhoto({
-    quality: 90,
-    allowEditing: true,
-    resultType: CameraResultType.Base64
-  })
-
-  // The result will vary on the value of the resultType option.
-  // CameraResultType.Uri - Get the result from image.webPath
-  // CameraResultType.Base64 - Get the result from image.base64String
-  // CameraResultType.DataUrl - Get the result from image.dataUrl
-  if (image.base64String) {
-    imageSrc.value = 'data:image/png;base64,'+ image.base64String;
-    imageBase64.value = image.base64String;
+  if (!loading.value) {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64
+    })
+    if (image.base64String) {
+      imageSrc.value = 'data:image/png;base64,'+ image.base64String;
+      imageBase64.value = image.base64String;
+    }
   }
 }
 </script>

@@ -36,19 +36,34 @@ export const useItemsStore = defineStore({
     },
 
     /**
-     * Adds an item to the store
-     * @param item The item to add
-     */
-    addItem(item: Item) {
-      this.items.push(item);
-    },
-
-    /**
      * Get an item from the store
      * @param id The id of the item to get
      */
     getItem(id: string): Item | undefined {
       return this.items.find((item) => item.id === id);
+    },
+
+    /**
+     * A helper function to update an item in Firebase
+     * @param item The item to update
+     * @param image The base64 of an image to upload (optional)
+     */
+    async updateItem(item: Item, image?: string) {
+      const itemsCollection = createCollection<Item>('organisations/' + useAuthStore().organisation + '/items');
+      let itemDoc;
+      if (item.id == '') {
+        itemDoc = doc(itemsCollection);
+        item.id = itemDoc.id;
+      } else {
+        itemDoc = doc(itemsCollection, item.id);
+      }
+      if (image !== undefined) {
+        await this.uploadImage(item.id, image);
+      }
+      await setDoc(itemDoc, item).then(() => {
+        this.items.push(item);
+        this.router.replace('/dashboard/items/' + item.id);
+      });
     },
 
     /**
@@ -62,7 +77,7 @@ export const useItemsStore = defineStore({
         return;
       }
       delete item.information[informationKey];
-      await updateItem(item);
+      await this.updateItem(item);
     },
 
     /**
@@ -77,17 +92,16 @@ export const useItemsStore = defineStore({
         return;
       }
       item.information[informationKey] = informationValue;
-      await updateItem(item);
+      await this.updateItem(item);
     },
 
     /**
-     * Uploads an image to Firebase Storage and updates the image property of the given item
+     * Uploads an image to Firebase
      * @param itemID The ID of the item
      * @param image The base64 of an image to upload
      */
     async uploadImage(itemID: string, image: string | undefined) {
-      const item = this.getItem(itemID);
-      if (item === undefined || image === undefined) {
+      if (image === undefined) {
         return;
       }
       const metadata = {
@@ -104,18 +118,8 @@ export const useItemsStore = defineStore({
      */
     async getImageUrl(itemID: string | undefined): Promise<string> {
       const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/items/${itemID}`);
-      return getDownloadURL(storageRef, );
+      return getDownloadURL(storageRef);
     }
   },
   persist: true
 });
-
-/**
- * A helper function to update an item in Firebase
- * @param item The item to update
- */
-async function updateItem(item: Item) {
-  const itemsCollection = createCollection<Item>('organisations/' + useAuthStore().organisation + '/items');
-  const itemDoc = doc(itemsCollection, item.id);
-  await setDoc(itemDoc, item);
-}

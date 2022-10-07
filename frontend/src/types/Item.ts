@@ -10,7 +10,6 @@ export type Item = {
   name: string;
   description: string;
   status: ItemStatus;
-  image: string;
   information: Record<string, string | boolean | number>;
 }
 
