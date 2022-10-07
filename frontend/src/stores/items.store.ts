@@ -72,7 +72,7 @@ export const useItemsStore = defineStore({
           const index = this.items.findIndex((i) => i.id === item.id);
           this.items[index] = item;
         }
-        this.router.back();
+        this.router.replace('/dashboard/items/' + item.id);
       });
     },
 
