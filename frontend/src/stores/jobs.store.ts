@@ -2,7 +2,7 @@ import {Job, JobStatus} from 'src/types/Job';
 import {defineStore} from 'pinia';
 import {db, storage} from 'boot/firebase';
 import {collection, CollectionReference, doc, DocumentData, getDocs, setDoc, deleteDoc} from 'firebase/firestore';
-import {ref, listAll, getDownloadURL, uploadString} from 'firebase/storage';
+import {ref, listAll, getDownloadURL, uploadString, deleteObject} from 'firebase/storage';
 import {useAuthStore} from 'stores/auth.store';
 
 type State = {
@@ -136,6 +136,18 @@ export const useJobsStore = defineStore({
       }
       const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/jobs/${jobID}/${name}`);
       await uploadString(storageRef, image, 'base64', metadata);
+    },
+
+    /**
+     * Deletes an image from Firebase Storage that is associated with a job
+     */
+    async deleteJobImage(jobID: string, url: string) {
+      if (useAuthStore().organisation === null || jobID === '' || url === '') {
+        return;
+      }
+      console.log(url);
+      const storageRef = ref(storage, url);
+      await deleteObject(storageRef);
     }
   },
   persist: true

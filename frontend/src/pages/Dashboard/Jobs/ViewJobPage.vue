@@ -184,7 +184,12 @@ function deleteImage() {
     ok: 'Yes',
     cancel: 'No',
   }).onOk(() => {
-    //jobsStore.deleteJobImage(job.value?.id ?? '', images.value[slide.value]);
+    const image = images.value[slide.value];
+    images.value.splice(slide.value, 1);
+    if (images.value.length === 0) {
+      images.value.push('https://via.placeholder.com/150x150/cccccc/969696?text=+');
+    }
+    jobsStore.deleteJobImage(job.value?.id ?? '', image);
   });
 }
 </script>
