@@ -5,6 +5,14 @@ export type Job = {
   description: string;
   status: JobStatus;
   jobType: JobType;
+  comments: Comment[];
+}
+
+export type Comment = {
+  id: string;
+  comment: string;
+  timestamp: Date;
+  user: string;
 }
 
 export enum JobStatus {
