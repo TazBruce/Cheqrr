@@ -91,7 +91,7 @@ import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
 import InfoTable from '../../../components/Items/Info/InfoTable.vue';
-import ImageDialog from '../../../components/Items/ImageDialog.vue';
+import ImageDialog from 'components/ImageDialog.vue';
 import {useQuasar} from 'quasar';
 
 
@@ -121,11 +121,9 @@ if (item.value === undefined) {
 function updateItemImage() {
   $q.dialog({
     component: ImageDialog,
-    componentProps: {
-      itemID: item.value?.id,
-    },
   }).onOk((payload) => {
-    itemImage.value = payload.image;
+    itemImage.value = payload.imageSrc;
+    itemsStore.uploadImage(props.id, payload.imageBase64);
   });
 }
 

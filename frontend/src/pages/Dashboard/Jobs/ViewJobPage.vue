@@ -44,20 +44,49 @@
                 :name="index"
                 :img-src="image"
               />
+              <template v-slot:control>
+                <q-carousel-control
+                  position="top-left"
+                >
+                  <q-btn
+                    flat
+                    text-color="white"
+                    icon="photo_camera"
+                    @click="addImage"
+                  />
+                </q-carousel-control>
+                <q-carousel-control
+                  position="top-right"
+                >
+                  <q-btn
+                    flat
+                    text-color="negative"
+                    icon="delete"
+                    @click="deleteImage"
+                  />
+                </q-carousel-control>
+              </template>
             </q-carousel>
           </div>
         </div>
         <div class="col-5">
           <div class="column full-height justify-between">
             <div class="col-8">
-              <div class="text-h5">
+              <div class="text-h6 wrap ellipsis">
                 {{ job.title }}
               </div>
-              <div class="text-subtitle2">
+              <div class="text-subtitle1 text-grey-8 wrap ellipsis-3-lines">
                 {{ job.description }}
               </div>
+              <q-btn
+                class="absolute-top-right"
+                style="margin-right: 20px; margin-top: 60px;"
+                color="primary"
+                icon="edit"
+                @click="editJob"
+              />
             </div>
-            <div class="col-2 text-h6">
+            <div class="col-2 text-subtitle2">
               <q-avatar size="xs" :class="getJobStatusColor(job.status)"></q-avatar>
               {{ job.status }}
             </div>
@@ -96,9 +125,11 @@ import {ref} from 'vue';
 import {useJobsStore} from 'stores/jobs.store';
 import {useItemsStore} from 'stores/items.store';
 import {useRouter} from 'vue-router';
+import {useQuasar} from 'quasar';
 
 const jobsStore = useJobsStore();
 const itemsStore = useItemsStore();
+const $q = useQuasar();
 const router = useRouter();
 
 const props = defineProps<{
@@ -127,11 +158,28 @@ function editJob() {
 }
 
 /**
- * Deletes the job and navigates to the dashboard
+ * Adds a new image to the job
  */
-function deleteJob() {
-  jobsStore.deleteJob(job.value?.id);
-  router.push({ name: 'jobs' });
+function addImage() {
+  $q.dialog({
+    component: () => import('components/ImageDialog.vue'),
+  }).onOk((image) => {
+    //jobsStore.addJobImage(job.value?.id ?? '', image);
+  });
+}
+
+/**
+ * Deletes the current image from the job
+ */
+function deleteImage() {
+  $q.dialog({
+    title: 'Delete Image',
+    message: 'Are you sure you want to delete this image?',
+    ok: 'Yes',
+    cancel: 'No',
+  }).onOk(() => {
+    //jobsStore.deleteJobImage(job.value?.id ?? '', images.value[slide.value]);
+  });
 }
 </script>
 

@@ -102,7 +102,7 @@ export const useJobsStore = defineStore({
      */
     async getJobImages(jobID: string) {
       if (useAuthStore().organisation === null || jobID === '') {
-        return ['https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER'];
+        return ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
       }
       const storageRef = ref(storage, `organisations/${useAuthStore().organisation}/jobs/${jobID}/`);
       const images: string[] = [];
@@ -115,7 +115,7 @@ export const useJobsStore = defineStore({
       }
       );
       if (images.length === 0) {
-        return ['https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER'];
+        return ['https://via.placeholder.com/150x150/cccccc/969696?text=+'];
       }
       return images;
     }

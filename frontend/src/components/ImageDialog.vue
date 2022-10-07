@@ -36,19 +36,13 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
-import { useItemsStore } from 'stores/items.store';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
-
-const props = defineProps<{
-  itemID: string;
-}>();
 
 defineEmits([
   ...useDialogPluginComponent.emits,
 ])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-const itemsStore = useItemsStore();
 
 const imageSrc = ref('');
 const loading = ref(false);
@@ -75,10 +69,7 @@ function close() {
 }
 
 async function save() {
-  loading.value = true;
-  await itemsStore.uploadImage(props.itemID, image.base64String);
-  loading.value = false;
-  onDialogOK({ image: imageSrc.value});
+  onDialogOK({ imageSrc: imageSrc.value, imageBase64: image.base64String })
 }
 </script>
 
