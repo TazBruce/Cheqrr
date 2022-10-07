@@ -30,6 +30,13 @@
         <div class="col-10">
           <div class="text-h6 wrap ellipsis-3-lines">{{item.name}}</div>
           <div class="text-subtitle1 text-grey-8 wrap ellipsis-2-lines">{{item.description}}</div>
+          <q-btn
+            class="absolute-top-right"
+            style="margin-right: 20px; margin-top: 60px;"
+            color="primary"
+            icon="edit"
+            @click="editItem"
+          />
         </div>
         <div class="col-2">
           <div class="row q-gutter-x-xs self-end">
@@ -120,6 +127,10 @@ function updateItemImage() {
   }).onOk((payload) => {
     itemImage.value = payload.image;
   });
+}
+
+function editItem() {
+  router.push({ name: 'editItem', params: { id: item.value?.id }});
 }
 </script>
 

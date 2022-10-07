@@ -7,10 +7,11 @@
       :label-class="`text-grey-8`"
       :active-class="`text-primary`"
     >
-      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.back()" />
-      <q-breadcrumbs-el label="Create Item" class="text-grey-7" />
+      <q-breadcrumbs-el  label="Items" class="cursor-pointer q-hoverable" @click="router.go(-2)" />
+      <q-breadcrumbs-el :label="name" class="cursor-pointer q-hoverable" @click="router.go(-1)" />
+      <q-breadcrumbs-el :label="title" class="text-grey-7" />
     </q-breadcrumbs>
-    <h1 class="text-h5">Create Item</h1>
+    <h1 class="text-h5">{{title}}</h1>
     <q-form @submit="onSubmit" class="column q-gutter-y-sm">
       <div class="col self-center">
         <q-img
@@ -56,6 +57,13 @@
         :rules="[val => val.length > 0 || 'Description is required',
         val => val.length < 100 || 'Description must be less than 100 characters']"
       />
+      <q-select
+        v-model="status"
+        label="Status"
+        filled
+        :options="statusOptions"
+        :disable="loading"
+      />
       <q-btn type="submit" color="primary" label="Submit" :loading="loading" />
     </q-form>
   </q-page>
@@ -69,23 +77,55 @@ import {Item, ItemStatus} from 'src/types/Item';
 import {useItemsStore} from 'src/stores/items.store';
 
 const router = useRouter();
+const itemsStore = useItemsStore();
 
+const props = defineProps<{
+  id?: string;
+}>()
+
+let item: Item | undefined;
+const title = ref('Create Item');
 const name = ref('');
 const description = ref('');
 const imageSrc = ref('');
 const imageBase64 = ref('');
 const loading = ref(false);
+const status = ref(ItemStatus.available);
+
+const statusOptions = [
+  ItemStatus.available,
+  ItemStatus.unavailable,
+  ItemStatus.flagged,
+  ItemStatus.maintenance
+];
+
+if (props.id) {
+  item = useItemsStore().getItem(props.id);
+  if (item) {
+    title.value = 'Edit Item';
+    name.value = item.name;
+    description.value = item.description;
+    status.value = item.status;
+    itemsStore.getImageUrl(item.id).then((url) => {
+      imageSrc.value = url;
+    }).catch(() => {
+      imageSrc.value = 'https://via.placeholder.com/150x150/cccccc/969696?text=PLACEHOLDER';
+    });
+  } else {
+    router.push({name: 'Dashboard'});
+  }
+}
 
 async function onSubmit() {
   loading.value = true;
-  const item: Item = {
-    id: '',
+  const newItem: Item = {
+    id: props.id || '',
     name: name.value,
     description: description.value,
-    status: ItemStatus.available,
-    information: {}
+    information: item?.information ? item.information : {},
+    status: status.value
   };
-  await useItemsStore().updateItem(item, imageBase64.value);
+  await itemsStore.updateItem(newItem, imageBase64.value);
   loading.value = false;
 };
 

@@ -1,9 +1,9 @@
-import { Item } from 'src/types/Item';
-import { defineStore } from 'pinia';
-import { db, storage } from 'boot/firebase';
-import { ref, uploadString, getDownloadURL } from 'firebase/storage';
-import { DocumentData, collection, getDocs, CollectionReference, doc, setDoc } from 'firebase/firestore';
-import { useAuthStore } from 'stores/auth.store';
+import {Item} from 'src/types/Item';
+import {defineStore} from 'pinia';
+import {db, storage} from 'boot/firebase';
+import {getDownloadURL, ref, uploadString} from 'firebase/storage';
+import {collection, CollectionReference, doc, DocumentData, getDocs, setDoc} from 'firebase/firestore';
+import {useAuthStore} from 'stores/auth.store';
 
 type State = {
   items: Item[]
@@ -49,20 +49,30 @@ export const useItemsStore = defineStore({
      * @param image The base64 of an image to upload (optional)
      */
     async updateItem(item: Item, image?: string) {
+      if (useAuthStore().organisation === null) {
+        return;
+      }
       const itemsCollection = createCollection<Item>('organisations/' + useAuthStore().organisation + '/items');
       let itemDoc;
+      let isUpdate = false;
       if (item.id == '') {
         itemDoc = doc(itemsCollection);
         item.id = itemDoc.id;
       } else {
+        isUpdate = true;
         itemDoc = doc(itemsCollection, item.id);
       }
-      if (image !== undefined) {
+      if (image !== undefined && image !== '') {
         await this.uploadImage(item.id, image);
       }
-      await setDoc(itemDoc, item).then(() => {
-        this.items.push(item);
-        this.router.replace('/dashboard/items/' + item.id);
+      await setDoc(itemDoc, item, {merge: true}).then(() => {
+        if (!isUpdate) {
+          this.items.push(item);
+        } else {
+          const index = this.items.findIndex((i) => i.id === item.id);
+          this.items[index] = item;
+        }
+        this.router.back();
       });
     },
 
