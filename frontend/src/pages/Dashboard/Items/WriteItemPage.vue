@@ -11,22 +11,32 @@
       <q-breadcrumbs-el label="Create Item" class="text-grey-7" />
     </q-breadcrumbs>
     <h1 class="text-h5">Create Item</h1>
-    <q-form @submit="onSubmit" class="q-gutter-y-sm">
-      <q-img
-        class="q-responsive cursor-pointer q-hoverable bg-primary"
-        v-ripple
-        :src="imageSrc"
-        style="max-width: 140px; height: 140px;"
-        alt="Item Image"
-        @click="updateItemImage"
-      >
+    <q-form @submit="onSubmit" class="column q-gutter-y-sm">
+      <div class="col self-center">
+        <q-img
+          class="cursor-pointer q-hoverable bg-primary"
+          v-ripple
+          :src="imageSrc"
+          style="width: 140px; height: 140px;"
+          alt="Item Image"
+          @click="updateItemImage"
+        >
+          <q-btn
+            class="absolute-center"
+            flat
+            text-color="white"
+            icon="photo_camera"
+          />
+        </q-img>
+      </div>
+      <div class="col self-center">
         <q-btn
-          class="absolute-center"
-          flat
-          text-color="white"
-          icon="photo_camera"
+          color="negative"
+          icon="delete"
+          label="Remove Image"
+          @click="imageSrc = ''"
         />
-      </q-img>
+      </div>
       <q-input
         v-model="name"
         label="Name"
