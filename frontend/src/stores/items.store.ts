@@ -65,7 +65,7 @@ export const useItemsStore = defineStore({
       if (image !== undefined && image !== '') {
         await this.uploadImage(item.id, image);
       }
-      await setDoc(itemDoc, item, {merge: true}).then(() => {
+      await setDoc(itemDoc, item).then(() => {
         if (!isUpdate) {
           this.items.push(item);
         } else {
