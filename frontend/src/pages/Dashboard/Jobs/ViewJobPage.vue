@@ -161,7 +161,7 @@ if (job.value === undefined) {
  * Navigate to the edit job page
  */
 function editJob() {
-  router.push({ name: 'editJob', params: { id: job.value?.id }});
+  router.push({ name: 'editJob', params: { id: props.id, itemID: item.value?.id }});
 }
 
 /**

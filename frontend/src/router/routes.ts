@@ -26,10 +26,10 @@ const routes: RouteRecordRaw[] = [
       { path: '', redirect: '/dashboard/jobs' },
       { path: 'jobs', component: RouterView,
         children: [
-          { name: 'jobs', path: '', component: () => import('pages/Dashboard/Jobs/JobsPage.vue') },
-          { name: 'createJob', path: 'create', component: () => import('pages/Dashboard/Jobs/WroteJobPage.vue') },
-          { name: 'viewJob', path: ':id', component: () => import('pages/Dashboard/Jobs/ViewJobPage.vue'), props: true },
-          { name: 'editJob', path: ':id/edit', component: () => import('pages/Dashboard/Jobs/WriteJobPage.vue'), props: true },
+          { name: 'jobs', path: '', component: () => import('../pages/Dashboard/Jobs/JobsPage.vue') },
+          { name: 'createJob', path: ':itemID/create', component: () => import('../pages/Dashboard/Jobs/WriteJobPage.vue'), props: true },
+          { name: 'viewJob', path: ':id', component: () => import('../pages/Dashboard/Jobs/ViewJobPage.vue'), props: true },
+          { name: 'editJob', path: ':itemID/:id/edit', component: () => import('../pages/Dashboard/Jobs/WriteJobPage.vue'), props: true },
         ]
       },
       { path: 'items', component: RouterView,

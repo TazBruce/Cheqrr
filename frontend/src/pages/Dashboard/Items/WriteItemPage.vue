@@ -140,7 +140,7 @@ async function onSubmit() {
   };
   await itemsStore.updateItem(newItem, imageBase64.value);
   loading.value = false;
-};
+}
 
 /**
  * Opens the camera and allows the user to take a picture.

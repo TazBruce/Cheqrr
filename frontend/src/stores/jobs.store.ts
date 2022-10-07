@@ -46,8 +46,8 @@ export const useJobsStore = defineStore({
      * A helper function to update a job in Firebase
      * @param job The job to update
      */
-    async updateJob(job: Job) {
-      if (useAuthStore().organisation === null) {
+    async updateJob(job: Job | undefined) {
+      if (useAuthStore().organisation === null || job === undefined) {
         return;
       }
       const jobsCollection = createCollection<Job>('organisations/' + useAuthStore().organisation + '/jobs');
@@ -64,6 +64,7 @@ export const useJobsStore = defineStore({
       if (!isUpdate) {
         this.jobs.push(job);
       }
+      return job.id;
     },
 
     /**
