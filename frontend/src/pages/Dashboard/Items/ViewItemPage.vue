@@ -61,6 +61,7 @@
             <q-tab name="jobs" label="Jobs" />
             <q-tab name="comments" label="Comments" />
             <q-tab name="info" label="Info" />
+            <q-tab name="qr" label="QR Code" />
           </q-tabs>
           <q-separator />
           <q-tab-panels v-model="tab" animated class="absolute fit">
@@ -87,6 +88,10 @@
               <div class="text-h6">Information</div>
               <InfoTable :id="item.id"/>
             </q-tab-panel>
+            <q-tab-panel name="qr">
+              <div class="text-h6">QR Code</div>
+              <qrcode-vue :value="item.id" :size="350"></qrcode-vue>
+            </q-tab-panel>
           </q-tab-panels>
         </q-card>
       </div>
@@ -96,6 +101,7 @@
 
 <script setup lang="ts">
 import {Item, getItemStatusColor} from 'src/types/Item';
+import QrcodeVue from 'qrcode.vue';
 import {ref} from 'vue';
 import {useItemsStore} from 'stores/items.store';
 import {useJobsStore} from 'stores/jobs.store';
