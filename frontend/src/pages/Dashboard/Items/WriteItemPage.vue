@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
-import {Comment} from "src/types/Job";
+import {Comment} from 'src/types/Job';
 import {useRouter} from 'vue-router';
 import {Camera, CameraResultType} from '@capacitor/camera';
 import {Item, ItemStatus} from 'src/types/Item';

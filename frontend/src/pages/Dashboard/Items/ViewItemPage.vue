@@ -104,7 +104,7 @@ import InfoTable from '../../../components/Items/Info/InfoTable.vue';
 import ImageDialog from 'components/ImageDialog.vue';
 import {useQuasar} from 'quasar';
 import JobComponent from 'components/Jobs/JobComponent.vue';
-import CommentTable from "components/CommentTable.vue";
+import CommentTable from 'components/CommentTable.vue';
 
 
 const router = useRouter();
