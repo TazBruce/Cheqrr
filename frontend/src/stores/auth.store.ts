@@ -4,7 +4,7 @@ import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, Use
 import {deleteDoc, doc, getDoc, setDoc, addDoc, collection} from 'firebase/firestore';
 import {Role, RoleType} from 'src/types/Role';
 import {useItemsStore} from 'stores/items.store';
-import {useJobsStore} from "stores/jobs.store";
+import {useJobsStore} from 'stores/jobs.store';
 
 type State = {
   role: Role | null;
@@ -33,6 +33,20 @@ export const useAuthStore = defineStore({
     }
   },
   actions: {
+    /**
+     * Gets the invite code for the organisation.
+     */
+    async getInviteCode() {
+      if (this.role === null) {
+        return '';
+      }
+      const org = await getDoc(doc(db, 'organisations', this.role.orgID));
+      if (org.exists()) {
+        return org.data()?.inviteCode;
+      }
+      return '';
+    },
+
     /**
      * Registers the user.
      * @param username The username
@@ -185,6 +199,8 @@ export const useAuthStore = defineStore({
         return;
       }
       await deleteDoc(doc(db, 'roles', this.user?.uid as string));
+      this.role = null;
+      this.router.push('/dashboard');
       alert('Left organisation!');
     }
   },

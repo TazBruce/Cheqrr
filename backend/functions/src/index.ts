@@ -16,6 +16,7 @@ export const authOnDelete =
 /**
  * A function that is triggered when an organisation is created.
  * Adds the organisation and admin role to the user who created it.
+ * Generates a random 6 digit invite code for the organisation.
  */
 export const orgOnCreate =
     functions.firestore
@@ -31,5 +32,13 @@ export const orgOnCreate =
             await firestore.collection('roles').doc(userID).set({
                 orgID,
                 role: 'Owner',
+            });
+            console.log(`Generating invite code for organisation ${orgID}`);
+            const inviteCode = Math.floor(100000 + Math.random() * 900000).toString();
+            await firestore.collection('invite-codes').doc(inviteCode).set({
+                orgID,
+            });
+            await firestore.collection('organisations').doc(orgID).update({
+                inviteCode,
             });
         });

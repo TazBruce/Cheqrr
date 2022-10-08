@@ -18,9 +18,9 @@
           flat
           dense
           round
-          icon="account_circle"
-          aria-label="Account"
-          @click="signOut"
+          icon="settings"
+          aria-label="Settings"
+          to="/dashboard/settings"
           />
       </q-toolbar>
     </q-header>
@@ -89,21 +89,7 @@ const menuList = [
     route: '/dashboard/items',
     separator: false
   },
-  {
-    icon: 'topic',
-    label: 'Forms',
-    route: '/dashboard/forms',
-    separator: false
-  },
 ]
 
 const leftDrawerOpen = ref(false);
-
-/**
- * Sign out
- */
-function signOut() {
-  const auth = useAuthStore();
-  auth.signOut();
-}
 </script>

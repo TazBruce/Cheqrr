@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
           { name: 'viewItem', path: ':id', component: () => import('../pages/Dashboard/Items/ViewItemPage.vue'), props: true }
         ]
       },
-      { path: 'forms', component: () => import('../pages/Dashboard/FormsPage.vue') },
+      { path: 'settings', component: () => import('../pages/Dashboard/SettingsPage.vue') },
     ],
   },
 

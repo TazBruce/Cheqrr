@@ -14,6 +14,8 @@ service cloud.firestore {
       // Only authenticated users can read roles that have the same ID as their UID (if the role exists)
       allow get: if request.auth != null && request.auth.uid == roleID;
 
+      allow delete: if request.auth != null && request.auth.uid == roleID;
+
       // Only authenticated users can write their own roles, the role must be equal to "Reporter"
       allow write: if request.auth != null && request.resource.id == request.auth.uid && request.resource.data.role == "Reporter";
     }
@@ -55,7 +57,7 @@ service cloud.firestore {
                       get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
 
         // Only authenticated users that at least have the role "Maintainer" with the same orgID can manage items
-        allow update, create, delete: if request.auth != null && isRole("Maintainer");
+        allow update, create, delete: if request.auth != null && isRole("Reporter");
       }
 
       match /jobs/{jobID} {
@@ -64,7 +66,7 @@ service cloud.firestore {
                       get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.orgID == orgID;
 
         // Only authenticated users that at least have the role "Repairer" with the same orgID can manage jobs
-        allow update, create, delete: if request.auth != null && isRole("Repairer");
+        allow update, create, delete: if request.auth != null && isRole("Reporter");
       }
     }
   }
