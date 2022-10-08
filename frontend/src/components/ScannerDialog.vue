@@ -10,26 +10,15 @@
             filled
             dense
           />
-          <div>
-            <QrStream :camera="camera" @decode="onDecode" @init="onInit">
-              <div v-if="isValid" class="validation-success">
-                This is a URL
-              </div>
-
-              <div v-if="isValid === false" class="validation-failure">
-                This is NOT a URL!
-              </div>
-
-              <div v-if="isValid === undefined && camera === 'off'" class="validation-pending">
-                Long validation in progress...
-              </div>
-            </QrStream>
-          </div>
           <q-btn
-            class="q-mt-md"
+            class="q-mt-md content-center"
             color="primary"
             label="Scan"
+            @click="camera = 'auto'"
           />
+          <div>
+            <QrStream :camera="camera" @decode="onDecode" @init="onInit"></QrStream>
+          </div>
           <div class="text-body1 text-center text-negative">
             {{ error }}
           </div>
@@ -93,12 +82,6 @@ async function onDecode(content) {
   scanResult.value = content;
   result.value = content
   turnCameraOff()
-  // pretend it's taking really long
-  await timeout(3000)
-  isValid.value = content.startsWith('http')
-  // some more delay, so users have time to read the message
-  await timeout(2000)
-  turnCameraOn()
 }
 
 function turnCameraOn() {
@@ -107,10 +90,6 @@ function turnCameraOn() {
 
 function turnCameraOff() {
   camera.value = 'off'
-}
-
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function save() {

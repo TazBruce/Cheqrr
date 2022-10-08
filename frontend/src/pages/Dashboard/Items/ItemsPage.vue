@@ -22,15 +22,20 @@ import { useItemsStore } from 'stores/items.store';
 import ScannerDialog from 'components/ScannerDialog.vue';
 import ItemComponent from 'components/Items/ItemComponent.vue';
 import {useQuasar} from 'quasar';
+import {useRouter} from "vue-router";
 
 const { items } = useItemsStore()
+const router = useRouter();
 const $q = useQuasar();
 
 function scanBarcode() {
   $q.dialog({
     component: ScannerDialog,
   }).onOk((result: string) => {
-    console.log(result);
+    const item = useItemsStore().getItem(result);
+    if (item) {
+      router.push({ name: 'viewItem', params: { id: result}})
+    }
   });
 }
 
