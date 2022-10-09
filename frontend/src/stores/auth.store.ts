@@ -85,18 +85,19 @@ export const useAuthStore = defineStore({
                 orgID: userRole.orgID,
                 role: userRole.role
               };
-              await getDoc(doc(db, 'users', userCredential.user.uid)).then(async (userDoc) => {
-                if (userDoc.exists()) {
-                  this.username = userDoc.data().username;
-                  this.user = userCredential.user;
-                  this.isLoggedIn = true;
-                  await useItemsStore().fetchItems();
-                  await useJobsStore().fetchJobs();
-                  this.router.push('/dashboard');
-                  alert('Signed in!');
-                }
-              });
+              await useItemsStore().fetchItems();
+              await useJobsStore().fetchJobs();
             }
+          }).finally(async() => {
+            await getDoc(doc(db, 'users', userCredential.user.uid)).then(async (userDoc) => {
+              if (userDoc.exists()) {
+                this.username = userDoc.data().username;
+                this.user = userCredential.user;
+                this.isLoggedIn = true;
+                this.router.push('/dashboard');
+                alert('Signed in!');
+              }
+            });
           });
         })
         .catch((error) => {
@@ -198,6 +199,8 @@ export const useAuthStore = defineStore({
         alert('You are not in an organisation!');
         return;
       }
+      useItemsStore().$reset();
+      useJobsStore().$reset();
       await deleteDoc(doc(db, 'roles', this.user?.uid as string));
       this.role = null;
       this.router.push('/dashboard');

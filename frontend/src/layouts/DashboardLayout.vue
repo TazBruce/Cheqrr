@@ -73,14 +73,13 @@
 </template>
 
 <script setup>
-import { useAuthStore } from 'src/stores/auth.store';
 import { ref } from 'vue';
 
 const menuList = [
   {
     icon: 'assignment',
     label: 'Jobs',
-    route: '/dashboard',
+    route: '/dashboard/jobs',
     separator: false,
   },
   {
