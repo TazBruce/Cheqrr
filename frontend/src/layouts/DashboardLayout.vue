@@ -18,6 +18,7 @@
           flat
           dense
           round
+          v-if="$q.platform.is.desktop"
           icon="settings"
           aria-label="Settings"
           to="/dashboard/settings"
@@ -65,8 +66,8 @@
         class="text-grey-14"
       >
         <q-route-tab to="/dashboard/items" replace name="items" label="Items" icon="inventory" />
-        <q-route-tab to="/dashboard" replace name="jobs" label="Jobs" icon="assignment" />
-        <q-route-tab to="/dashboard/forms" replace name="forms" label="Forms" icon="topic" />
+        <q-route-tab to="/dashboard/jobs" replace name="jobs" label="Jobs" icon="assignment" />
+        <q-route-tab to="/dashboard/settings" replace name="settings" label="Settings" icon="settings" />
       </q-tabs>
     </q-footer>
   </q-layout>
